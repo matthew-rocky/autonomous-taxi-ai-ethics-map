@@ -1,0 +1,11 @@
+[2m4:09:22 PM[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to load url /src/lib/safePointSuggestions.ts (resolved id: C:/Github TMP/AI ETHICS PROTOTYPE/src/lib/safePointSuggestions.ts) in C:/Github TMP/AI ETHICS PROTOTYPE/src/index.css. Does the file exist?
+[2m4:12:10 PM[22m [33m[1m[vite][22m[39m [33mwarning: [33mDuplicate "key" attribute in JSX element[33m
+738|                  <Marker
+739|                    key={`route-label-${option.id}`}
+740|                    key={`route-label-${routeLayerKey}-${option.id}`}
+   |                    ^
+741|                    position={routeLabelPosition(option.routePath, option.id, true)}
+742|                    icon={createRouteLabelIcon(routeLabelText(option, active), active, hovered, false)}
+[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mC:/Github TMP/AI ETHICS PROTOTYPE/src/components/MapReportView.tsx[39m

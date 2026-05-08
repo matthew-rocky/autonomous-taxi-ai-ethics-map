@@ -1,0 +1,66 @@
+
+> ai-ethics-decision-intelligence@1.0.0 dev
+> vite --host 127.0.0.1 --port 5174
+
+Re-optimizing dependencies because vite config has changed
+
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m188[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+[2m3:32:32 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/types.ts[22m
+[2m3:32:51 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/map/RouteReportPanel.tsx, /src/index.css[22m
+[2m3:33:09 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/map/AreaReportPanel.tsx, /src/index.css[22m
+[2m3:33:09 PM[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/map/AreaReportPanel.tsx[22m Could not Fast Refresh ("AREA_ISSUE_TYPES" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m3:33:09 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/MapReportView.tsx[22m
+[2m3:33:19 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:33:26 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:33:30 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:33:38 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:33:51 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:34:13 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:34:21 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:34:26 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:34:36 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:34:52 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:34:57 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:35:04 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:35:11 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:35:15 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:35:31 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:35:41 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:35:53 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/map/ReportMarker.tsx, /src/index.css[22m
+[2m3:36:07 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/map/ReportPopup.tsx, /src/index.css[22m
+[2m3:36:20 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/map/DangerZoneLayer.tsx, /src/index.css[22m
+[2m3:36:26 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/map/SafeSuggestionCallout.tsx, /src/index.css[22m
+[2m3:36:44 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:36:50 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m3:36:55 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:37:30 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/LocationSearch.tsx, /src/index.css[22m
+[2m3:45:37 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/map/RouteReportPanel.tsx, /src/index.css[22m
+[2m3:45:43 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:45:53 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:46:03 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:46:17 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:46:21 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:46:27 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:46:33 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:46:37 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m3:47:00 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/map/LocationPlacementDock.tsx, /src/index.css[22m
+[2m3:47:05 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/LocationSearch.tsx, /src/index.css[22m
+[2m3:47:38 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:09:22 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/MapReportView.tsx[22m
+[2m4:10:28 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:10:37 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:11:12 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:11:22 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:11:30 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:11:40 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:11:43 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:11:57 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:12:10 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:12:19 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:12:26 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:12:35 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:12:38 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MapReportView.tsx, /src/index.css[22m
+[2m4:12:51 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/map/RoutePreviewDrawer.tsx, /src/index.css[22m
+[2m4:13:21 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/map/RoutePreviewDrawer.tsx, /src/index.css[22m
