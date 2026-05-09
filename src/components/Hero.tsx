@@ -10,25 +10,25 @@ interface HeroProps {
 
 export function Hero({ analysis, onViewChange }: HeroProps) {
   return (
-    <section className="grid gap-8 py-10 md:py-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+    <section className="grid min-w-0 gap-5 py-6 md:gap-8 md:py-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="max-w-3xl"
+        className="min-w-0 max-w-3xl"
       >
         <div className="eyebrow mb-4 inline-flex items-center gap-2">
           <BrainCircuit className="size-4" aria-hidden="true" />
           Responsible autonomy prototype
         </div>
-        <h1 className="text-5xl font-semibold tracking-normal text-white sm:text-6xl lg:text-7xl">
+        <h1 className="text-3xl font-semibold tracking-normal text-white sm:text-5xl lg:text-7xl">
           Uncertainty-Aware Navigation
         </h1>
-        <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
+        <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300 sm:mt-5 sm:text-lg sm:leading-8">
           Robo-Cab Ottawa does not try to perfectly detect danger. It detects uncertainty, makes confidence visible,
           and acts responsibly when confidence is low.
         </p>
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
           <button type="button" className="primary-button" onClick={() => onViewChange("assessment")}>
             Start Assessment
             <ArrowRight className="size-4" aria-hidden="true" />
@@ -44,23 +44,23 @@ export function Hero({ analysis, onViewChange }: HeroProps) {
         initial={{ opacity: 0, y: 22 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.12, ease: "easeOut" }}
-        className="glass-panel-strong overflow-hidden p-5"
+        className="glass-panel-strong min-w-0 overflow-hidden p-4 sm:p-5"
       >
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="metric-label">Live scenario</div>
-            <h2 className="mt-2 text-2xl font-semibold tracking-normal text-white">{analysis.scenarioName}</h2>
+            <h2 className="mt-2 text-xl font-semibold tracking-normal text-white sm:text-2xl">{analysis.scenarioName}</h2>
           </div>
           <ConfidenceBadge confidence={analysis.evaluation.confidence} compact />
         </div>
 
-        <div className="mt-7 grid grid-cols-3 gap-3">
+        <div className="mt-5 grid grid-cols-1 gap-3 min-[420px]:grid-cols-3 sm:mt-7">
           {[
             ["Score", `${analysis.evaluation.normalizedScore}`],
             ["Reports", `${analysis.evaluation.incidentCount}`],
             ["Confidence", analysis.evaluation.confidence.label],
           ].map(([label, value]) => (
-            <div key={label} className="subtle-panel p-4">
+            <div key={label} className="subtle-panel min-w-0 p-4">
               <div className="text-2xl font-semibold text-white">{value}</div>
               <div className="mt-1 text-xs font-medium uppercase tracking-[0.08em] text-slate-500">{label}</div>
             </div>

@@ -1056,6 +1056,10 @@ select:focus-visible {
   background: var(--map-dock-bg-strong) !important;
 }
 
+.app-main {
+  max-width: 100%;
+}
+
 .map-vignette-side {
   background: var(--map-vignette-side);
 }
@@ -1110,6 +1114,94 @@ select:focus-visible {
 @media (max-height: 820px) and (min-width: 1024px) {
   .route-preview-dock-layer {
     bottom: 5rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  .map-vignette-side {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--app-bg) 18%, transparent),
+      transparent 24%,
+      transparent 76%,
+      color-mix(in srgb, var(--app-bg) 18%, transparent)
+    );
+  }
+
+  .map-vignette-top {
+    height: 6.5rem;
+  }
+
+  .map-vignette-bottom {
+    height: 12rem;
+  }
+
+  .route-preview-dock {
+    border-radius: 1rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-button,
+  .primary-button,
+  .secondary-button,
+  .ghost-button,
+  .theme-switcher-option,
+  .map-input {
+    min-height: 2.75rem;
+  }
+
+  .theme-switcher {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .theme-switcher-option {
+    padding-inline: 0.35rem;
+    font-size: 0.68rem;
+  }
+
+  .leaflet-bottom.leaflet-right {
+    bottom: 8.75rem;
+    right: 0.5rem;
+  }
+
+  .leaflet-control-attribution {
+    max-width: min(16rem, calc(100vw - 7rem));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .leaflet-popup {
+    max-width: calc(100vw - 1.5rem);
+  }
+
+  .leaflet-tooltip {
+    max-width: calc(100vw - 1.5rem);
+    white-space: normal !important;
+  }
+
+  .route-label {
+    max-width: calc(100vw - 2rem);
+    overflow: hidden;
+    padding-inline: 0.6rem;
+    text-overflow: ellipsis;
+  }
+
+  .safe-suggestion-callout {
+    position: fixed !important;
+    right: 0.75rem;
+    bottom: calc(6.75rem + env(safe-area-inset-bottom));
+    left: 0.75rem !important;
+    top: auto !important;
+    width: auto;
+    transform: none !important;
+  }
+
+  .safe-suggestion-callout-connector {
+    display: none;
   }
 }
 

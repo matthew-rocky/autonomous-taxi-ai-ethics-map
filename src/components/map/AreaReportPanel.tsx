@@ -84,7 +84,7 @@ export function AreaReportPanel({
           <button
             type="button"
             className={cn(
-              "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border px-3 text-xs font-semibold transition",
+              "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border px-3 text-xs font-semibold transition sm:min-h-10",
               placingArea
                 ? "border-cyan-200/[0.45] bg-cyan-300/[0.18] text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.12)]"
                 : "border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.07]",
@@ -149,14 +149,14 @@ export function AreaReportPanel({
 
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-400">Area radius</div>
-            <div className="mt-2 grid grid-cols-5 gap-1.5">
+            <div className="mt-2 grid grid-cols-[repeat(auto-fit,minmax(58px,1fr))] gap-1.5">
               {AREA_RADII.map((radius) => (
                 <button
                   key={radius.value}
                   type="button"
                   onClick={() => onAreaRadiusChange(radius.value)}
                   className={cn(
-                    "min-h-9 rounded-lg border px-2 text-xs font-semibold transition",
+                    "min-h-11 rounded-lg border px-2 text-xs font-semibold transition sm:min-h-9",
                     areaRadiusMeters === radius.value
                       ? "border-cyan-200/30 bg-cyan-300/[0.12] text-cyan-100"
                       : "border-white/10 bg-white/[0.04] text-slate-400 hover:bg-white/[0.07]",
@@ -170,7 +170,7 @@ export function AreaReportPanel({
 
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-400">Severity</div>
-            <div className="mt-2 grid grid-cols-4 gap-1.5">
+            <div className="mt-2 grid grid-cols-[repeat(auto-fit,minmax(66px,1fr))] gap-1.5">
               {AREA_SEVERITIES.map((severity) => {
                 const style = getSeverityStyle(severity);
                 return (
@@ -179,7 +179,7 @@ export function AreaReportPanel({
                     type="button"
                     onClick={() => onAreaSeverityChange(severity)}
                     className={cn(
-                      "min-h-9 rounded-lg border px-2 text-xs font-bold transition",
+                      "min-h-11 rounded-lg border px-2 text-xs font-bold transition sm:min-h-9",
                       areaSeverity === severity ? style.badgeClass : "border-white/10 bg-white/[0.04] text-slate-500 hover:bg-white/[0.07]",
                     )}
                   >

@@ -117,7 +117,7 @@ export function GuidedTour({ open, activeView, onOpenChange, onViewChange }: Gui
         return true;
       }
 
-      const element = document.querySelector(step.target);
+      const element = getVisibleTourTarget(step.target);
       if (!(element instanceof HTMLElement)) {
         setTargetBox(null);
         return false;
@@ -135,7 +135,7 @@ export function GuidedTour({ open, activeView, onOpenChange, onViewChange }: Gui
     };
 
     const syncTarget = () => {
-      const element = step.target ? document.querySelector(step.target) : null;
+      const element = step.target ? getVisibleTourTarget(step.target) : null;
       if (element instanceof HTMLElement) {
         element.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" });
       }
@@ -306,6 +306,16 @@ export function ReplayTourButton({ onClick }: { onClick: () => void }) {
       <span className="hidden sm:inline">Help</span>
     </button>
   );
+}
+
+function getVisibleTourTarget(selector: string) {
+  const elements = Array.from(document.querySelectorAll(selector));
+  return elements.find((element) => {
+    if (!(element instanceof HTMLElement)) return false;
+    const rect = element.getBoundingClientRect();
+    const style = window.getComputedStyle(element);
+    return rect.width > 0 && rect.height > 0 && style.visibility !== "hidden" && style.display !== "none";
+  }) ?? null;
 }
 
 function getCardPosition(targetBox: TargetBox | null, placement: TourPlacement = "center") {

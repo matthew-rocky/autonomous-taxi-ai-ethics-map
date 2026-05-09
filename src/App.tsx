@@ -106,19 +106,19 @@ function AssessmentView({
   onViewChange,
 }: AssessmentViewProps) {
   return (
-    <section id="assessment" className="grid min-h-[calc(100vh-104px)] gap-6 lg:grid-cols-[330px_1fr]">
+    <section id="assessment" className="grid min-h-[calc(100vh-104px)] min-w-0 gap-4 md:gap-6 lg:grid-cols-[330px_1fr]">
       <ScenarioSelector analyses={analyses} selectedScenario={selectedScenario} onSelect={onSelectScenario} />
 
-      <div className="grid gap-6">
+      <div className="grid min-w-0 gap-4 md:gap-6">
         <ScenarioSummary analysis={analysis} onViewChange={onViewChange} />
         <PrototypeExplanationPanel />
 
-        <div className="grid gap-6 xl:grid-cols-[1.02fr_0.98fr]">
+        <div className="grid min-w-0 gap-4 md:gap-6 xl:grid-cols-[1.02fr_0.98fr]">
           <RiskScoreCard evaluation={analysis.evaluation} />
           <RiskField analysis={analysis} />
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[1fr_0.88fr]">
+        <div className="grid min-w-0 gap-4 md:gap-6 xl:grid-cols-[1fr_0.88fr]">
           <CategoryBreakdown categories={analysis.evaluation.categoryBreakdown} />
           <RiskRadarChart categories={analysis.evaluation.categoryBreakdown} />
         </div>
@@ -137,11 +137,11 @@ function ScenarioSummary({ analysis, onViewChange }: { analysis: ScenarioAnalysi
   const expectedMatches = analysis.evaluation.label === analysis.scenario.expected;
 
   return (
-    <section className="glass-panel-strong p-5">
+    <section className="glass-panel-strong min-w-0 p-4 sm:p-5">
       <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
         <div>
           <div className="metric-label">Scenario assessment</div>
-          <h2 className="mt-1 text-3xl font-semibold tracking-normal text-white">{analysis.scenarioName}</h2>
+          <h2 className="mt-1 text-2xl font-semibold tracking-normal text-white sm:text-3xl">{analysis.scenarioName}</h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">{analysis.scenario.summary}</p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -174,12 +174,12 @@ function ScenarioSummary({ analysis, onViewChange }: { analysis: ScenarioAnalysi
         />
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-3">
-        <button type="button" className="secondary-button" onClick={() => onViewChange("brief")}>
+      <div className="mt-5 grid gap-3 sm:flex sm:flex-wrap">
+        <button type="button" className="secondary-button w-full sm:w-auto" onClick={() => onViewChange("brief")}>
           <FileText className="size-4" aria-hidden="true" />
           Decision Brief
         </button>
-        <button type="button" className="secondary-button" onClick={() => onViewChange("compare")}>
+        <button type="button" className="secondary-button w-full sm:w-auto" onClick={() => onViewChange("compare")}>
           <ArrowUpRight className="size-4" aria-hidden="true" />
           Compare Scenarios
         </button>
@@ -200,20 +200,20 @@ function SummaryMetric({
   detail: string;
 }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+    <div className="min-w-0 rounded-lg border border-white/10 bg-white/[0.04] p-4">
       <div className="flex items-center gap-2 text-slate-400">
         <Icon className="size-4" aria-hidden="true" />
         <span className="text-xs font-semibold uppercase tracking-[0.08em]">{label}</span>
       </div>
-      <div className="mt-3 text-lg font-semibold text-white">{value}</div>
-      <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
+      <div className="mt-3 break-words text-lg font-semibold text-white">{value}</div>
+      <div className="mt-1 break-words text-xs leading-5 text-slate-500">{detail}</div>
     </div>
   );
 }
 
 function RiskField({ analysis }: { analysis: ScenarioAnalysis }) {
   return (
-    <section className="glass-panel p-5">
+    <section className="glass-panel min-w-0 p-4 sm:p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="metric-label">Confidence field</div>
@@ -229,8 +229,8 @@ function RiskField({ analysis }: { analysis: ScenarioAnalysis }) {
 
 function EvidencePanel({ analysis }: { analysis: ScenarioAnalysis }) {
   return (
-    <section className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
-      <div className="glass-panel p-5">
+    <section className="grid min-w-0 gap-4 xl:grid-cols-[0.9fr_1.1fr]">
+      <div className="glass-panel min-w-0 p-4 sm:p-5">
           <div className="metric-label">Evidence trail</div>
           <h2 className="mt-1 text-xl font-semibold text-white">Why this decision was made</h2>
         <ul className="mt-5 grid gap-3">
@@ -243,7 +243,7 @@ function EvidencePanel({ analysis }: { analysis: ScenarioAnalysis }) {
         </ul>
       </div>
 
-      <div className="glass-panel p-5">
+      <div className="glass-panel min-w-0 p-4 sm:p-5">
         <div className="metric-label">Nearby reports</div>
         <h2 className="mt-1 text-xl font-semibold text-white">Community signals</h2>
         {analysis.evaluation.nearbyReports.length === 0 ? (

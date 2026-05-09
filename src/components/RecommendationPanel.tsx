@@ -13,7 +13,7 @@ export function RecommendationPanel({ analysis }: RecommendationPanelProps) {
   const requiresHandoff = evaluation.confidence.level !== "white";
 
   return (
-    <section className="glass-panel p-5">
+    <section className="glass-panel min-w-0 p-4 sm:p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="metric-label">Accountable recommendation</div>
@@ -47,13 +47,13 @@ export function RecommendationPanel({ analysis }: RecommendationPanelProps) {
         ) : null}
 
         {recommendations.map((dropoff, index) => (
-          <article key={dropoff.name} className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+          <article key={dropoff.name} className="min-w-0 rounded-lg border border-white/10 bg-white/[0.04] p-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
+              <div className="flex min-w-0 items-center gap-3">
                 <span className="flex size-9 items-center justify-center rounded-lg border border-cyan-200/20 bg-cyan-300/10 text-cyan-100">
                   {index === 0 ? <Navigation className="size-4" aria-hidden="true" /> : <Route className="size-4" aria-hidden="true" />}
                 </span>
-                <div>
+                <div className="min-w-0">
                   <h3 className="font-semibold text-white">{dropoff.name}</h3>
                   <p className="mt-1 text-xs text-slate-400">{dropoff.category}</p>
                 </div>

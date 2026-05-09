@@ -17,7 +17,7 @@ export function AssessmentSignalMap({ analysis }: AssessmentSignalMapProps) {
 
   return (
     <div
-      className="relative mt-5 h-[310px] overflow-hidden rounded-lg border border-white/10 bg-slate-950/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
+      className="relative mt-5 h-[260px] overflow-hidden rounded-lg border border-white/10 bg-slate-950/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:h-[310px]"
       aria-label={`Ottawa signal map for ${analysis.destination.name}`}
     >
       <OttawaMapCanvas zoom={13} minZoom={11} maxZoom={18} scrollWheelZoom={false} className="assessment-signal-leaflet">

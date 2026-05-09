@@ -139,7 +139,7 @@ export function RoutePreviewDrawer({
   return (
     <motion.aside
       className={cn(
-        "map-dock map-dock-strong route-preview-dock pointer-events-auto mx-auto w-full max-w-[760px] overflow-hidden rounded-3xl border bg-[linear-gradient(145deg,rgba(2,6,23,0.95),rgba(15,23,42,0.9)_54%,rgba(15,47,85,0.82))] shadow-[0_18px_70px_rgba(0,0,0,0.46),0_0_0_1px_rgba(96,165,250,0.08)_inset,0_0_42px_rgba(37,99,235,0.12)] backdrop-blur-2xl",
+        "map-dock map-dock-strong route-preview-dock pointer-events-auto mx-auto max-h-[min(48svh,380px)] w-full max-w-[760px] overflow-y-auto rounded-3xl border bg-[linear-gradient(145deg,rgba(2,6,23,0.95),rgba(15,23,42,0.9)_54%,rgba(15,47,85,0.82))] shadow-[0_18px_70px_rgba(0,0,0,0.46),0_0_0_1px_rgba(96,165,250,0.08)_inset,0_0_42px_rgba(37,99,235,0.12)] backdrop-blur-2xl sm:max-h-none sm:overflow-hidden",
         routeReady ? "border-blue-200/30" : "border-white/15 opacity-95",
       )}
       initial={{ y: 0, opacity: 0 }}
@@ -152,7 +152,7 @@ export function RoutePreviewDrawer({
       <AnimatePresence initial={false}>
         {expanded && routeReady ? (
           <motion.div
-            className="max-h-[36vh] overflow-y-auto border-b border-blue-100/10 px-3 pb-3 pt-3 sm:px-4"
+            className="max-h-[34svh] overflow-y-auto border-b border-blue-100/10 px-3 pb-3 pt-3 sm:max-h-[36vh] sm:px-4"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -186,10 +186,10 @@ export function RoutePreviewDrawer({
         ) : null}
       </AnimatePresence>
 
-      <div className="space-y-2 px-3 py-3 sm:px-4">
+      <div className="space-y-1.5 px-2.5 py-2.5 sm:space-y-2 sm:px-4 sm:py-3">
         <div className="min-w-0">
           <div className="flex min-w-0 flex-wrap items-center gap-2">
-            <h2 className="flex min-w-[150px] flex-1 items-baseline gap-1.5 truncate text-base font-semibold tracking-normal text-white">
+            <h2 className="flex min-w-[104px] flex-1 items-baseline gap-1.5 truncate text-sm font-semibold tracking-normal text-white sm:min-w-[150px] sm:text-base">
               <span className="shrink-0">Directions</span>
               <span className="min-w-0 truncate text-xs font-bold text-slate-300">
                 {activeOption ? activeOption.name.replace(" route", "") : "No route"}
@@ -248,7 +248,7 @@ function RouteSourceBadge({
   return (
     <span
       className={cn(
-        "inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold",
+        "hidden min-w-0 max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold sm:inline-flex",
         routeReady || routingLoading ? "border-blue-200/25 bg-blue-300/[0.12] text-blue-100" : "border-white/10 bg-white/[0.045] text-slate-400",
       )}
       title={label}
@@ -277,8 +277,8 @@ function EndpointPath({
   dropoffLabel: string;
 }) {
   return (
-    <section className="min-w-0 rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-1.5">
-      <div className="flex min-w-0 items-center gap-2">
+    <section className="min-w-0 rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1.5 sm:px-2.5">
+      <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
         <EndpointToken icon={MapPinned} label="Pickup" value={pickup ? pickupLabel : "Select pickup"} muted={!pickup} />
         <ArrowRight className="size-4 shrink-0 text-slate-500" aria-hidden="true" />
         <EndpointToken icon={Navigation} label="Drop-off" value={dropoff ? dropoffLabel : "Select drop-off"} muted={!dropoff} />
@@ -299,17 +299,17 @@ function EndpointToken({
   muted: boolean;
 }) {
   return (
-    <div className="grid min-w-0 flex-1 grid-cols-[22px_minmax(0,1fr)] items-center gap-1.5">
+    <div className="grid min-w-0 flex-1 grid-cols-[20px_minmax(0,1fr)] items-center gap-1 sm:grid-cols-[22px_minmax(0,1fr)] sm:gap-1.5">
       <span
         className={cn(
-          "flex size-[22px] items-center justify-center rounded-full border",
+          "flex size-5 items-center justify-center rounded-full border sm:size-[22px]",
           muted ? "border-white/10 bg-white/[0.04] text-slate-500" : "border-blue-200/25 bg-blue-300/[0.12] text-blue-100",
         )}
       >
         <Icon className="size-3.5" aria-hidden="true" />
       </span>
-      <div className="flex min-w-0 items-baseline gap-1.5 overflow-hidden">
-        <span className="shrink-0 text-[0.62rem] font-bold uppercase tracking-[0.08em] text-slate-500">{label}</span>
+      <div className="flex min-w-0 items-baseline gap-1 overflow-hidden sm:gap-1.5">
+        <span className="hidden shrink-0 text-[0.62rem] font-bold uppercase tracking-[0.08em] text-slate-500 min-[420px]:inline sm:inline">{label}</span>
         <span className={cn("truncate text-xs font-semibold", muted ? "text-slate-500" : "text-white")} title={value}>
           {value}
         </span>
@@ -343,7 +343,7 @@ function RouteDecisionDetails({
 
   return (
     <motion.section
-      className="max-h-[38vh] overflow-y-auto rounded-xl border border-white/10 bg-white/[0.045] p-3"
+      className="max-h-[32svh] overflow-y-auto rounded-xl border border-white/10 bg-white/[0.045] p-3 sm:max-h-[38vh]"
       initial={{ height: 0, opacity: 0 }}
       animate={{ height: "auto", opacity: 1 }}
       exit={{ height: 0, opacity: 0 }}
@@ -451,10 +451,26 @@ function CompactRouteSummary({
 }) {
   const confidenceLabel = option ? getRouteSafetyLabel(option.safetyScore) : "-";
 
+  if (!routeReady) {
+    return (
+      <section className="rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1.5 sm:px-2.5 sm:py-2">
+        <div className="flex min-w-0 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-2">
+          <ShieldCheck className="size-4 shrink-0 text-slate-500" aria-hidden="true" />
+          <div className="min-w-0">
+            <div className="text-[0.62rem] font-bold uppercase tracking-[0.08em] text-slate-500">Recommendation</div>
+            <div className="truncate text-xs font-semibold text-slate-400" title={recommendation}>
+              {recommendation}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className={cn("rounded-xl border px-2.5 py-2", routeReady ? "border-blue-200/20 bg-blue-300/[0.08]" : "border-white/10 bg-white/[0.04]")}>
+    <section className={cn("rounded-xl border px-2 py-1.5 sm:px-2.5 sm:py-2", routeReady ? "border-blue-200/20 bg-blue-300/[0.08]" : "border-white/10 bg-white/[0.04]")}>
       <div className="flex min-w-0 flex-wrap items-stretch gap-1.5">
-        <div className="flex min-w-[140px] flex-[0_0_150px] items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5">
+        <div className="flex min-w-[min(100%,140px)] flex-[1_1_150px] items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1 sm:px-2.5 sm:py-1.5">
           <ShieldCheck className={cn("size-4 shrink-0", routeReady ? "text-emerald-100" : "text-slate-500")} aria-hidden="true" />
           <div className="min-w-0">
             <div className="text-[0.62rem] font-bold uppercase tracking-[0.08em] text-slate-500">Recommendation</div>
@@ -464,7 +480,7 @@ function CompactRouteSummary({
           </div>
         </div>
 
-        <div className="grid min-w-[min(300px,100%)] flex-1 grid-cols-[repeat(auto-fit,minmax(68px,1fr))] gap-1.5">
+        <div className="grid min-w-[min(248px,100%)] flex-1 grid-cols-4 gap-1 sm:min-w-[min(300px,100%)] sm:grid-cols-[repeat(auto-fit,minmax(68px,1fr))] sm:gap-1.5">
           <CompactRouteFact icon={Clock3} label="Time" value={option ? `${option.estimatedMinutes} min` : "--"} />
           <CompactRouteFact icon={MapPinned} label="Distance" value={option ? `${option.distanceKm.toFixed(2)} km` : "-"} />
           <CompactRouteFact icon={ShieldCheck} label="Confidence" value={confidenceLabel} toneClass={safetyTone(option?.safetyScore ?? 100)} />
@@ -472,7 +488,7 @@ function CompactRouteSummary({
         </div>
       </div>
 
-      <div className="mt-1.5 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(92px,1fr))] gap-1.5">
+      <div className="mt-1.5 grid min-w-0 grid-cols-4 gap-1 sm:grid-cols-[repeat(auto-fit,minmax(92px,1fr))] sm:gap-1.5">
         <RouteActionButton icon={ShieldCheck} label="Preview highest-confidence route" shortLabel="Preview" variant="primary" disabled={!routeReady} onClick={onPreview} />
         <RouteActionButton icon={GitCompareArrows} label="Compare routes" shortLabel="Compare" disabled={!routeReady} onClick={onCompare} />
         <RouteActionButton icon={Send} label="Submit route report" shortLabel="Submit" disabled={!routeReady} onClick={onSubmit} />
@@ -494,14 +510,14 @@ function CompactRouteFact({
   toneClass?: string;
 }) {
   return (
-    <div className="min-w-0 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1.5">
-      <div className="flex min-w-0 items-center gap-1 text-[0.6rem] font-bold uppercase tracking-[0.08em] text-slate-500">
+    <div className="min-w-0 rounded-lg border border-white/10 bg-white/[0.04] px-1.5 py-1 sm:px-2 sm:py-1.5">
+      <div className="flex min-w-0 items-center gap-1 text-[0.56rem] font-bold uppercase tracking-[0.04em] text-slate-500 sm:text-[0.6rem] sm:tracking-[0.08em]">
         <Icon className="size-3 shrink-0" aria-hidden="true" />
         <span className="truncate">{label}</span>
       </div>
       <div
         className={cn(
-          "mt-0.5 truncate text-xs font-semibold text-slate-100",
+          "mt-0.5 truncate text-[0.72rem] font-semibold text-slate-100 sm:text-xs",
           toneClass && "inline-flex max-w-full rounded-full border px-1.5 py-0.5 text-[0.68rem]",
           toneClass,
         )}
@@ -525,7 +541,7 @@ function DetailsToggleButton({
   return (
     <button
       type="button"
-      className="inline-flex min-h-8 min-w-0 items-center justify-center gap-1.5 rounded-lg border border-white/[0.12] bg-white/[0.055] px-2.5 text-xs font-bold text-slate-100 transition duration-200 hover:border-blue-200/[0.35] hover:bg-white/[0.09] disabled:cursor-not-allowed disabled:opacity-50"
+      className="inline-flex min-h-11 min-w-0 items-center justify-center gap-1 rounded-lg border border-white/[0.12] bg-white/[0.055] px-1 text-[0.68rem] font-bold text-slate-100 transition duration-200 hover:border-blue-200/[0.35] hover:bg-white/[0.09] disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-8 sm:gap-1.5 sm:px-2.5 sm:text-xs"
       aria-expanded={open}
       aria-label={open ? "Hide route decision details" : "Show route decision details"}
       title={open ? "Hide route decision details" : "Show route decision details"}
@@ -557,7 +573,7 @@ function RouteActionButton({
     <button
       type="button"
       className={cn(
-        "inline-flex min-h-8 min-w-0 items-center justify-center gap-1.5 rounded-lg border px-2.5 text-xs font-bold transition duration-200 disabled:cursor-not-allowed disabled:opacity-50",
+        "inline-flex min-h-11 min-w-0 items-center justify-center gap-1 rounded-lg border px-1 text-[0.68rem] font-bold transition duration-200 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-8 sm:gap-1.5 sm:px-2.5 sm:text-xs",
         variant === "primary"
           ? "border-blue-200/30 bg-blue-500 text-white shadow-[0_16px_42px_rgba(37,99,235,0.24)] hover:bg-blue-400"
           : "border-white/[0.12] bg-white/[0.055] text-slate-100 hover:border-blue-200/[0.35] hover:bg-white/[0.09]",

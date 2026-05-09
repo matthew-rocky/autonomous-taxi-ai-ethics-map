@@ -29,8 +29,8 @@ export function CompareScenarios({ analyses }: CompareScenariosProps) {
   };
 
   return (
-    <section className="grid gap-6">
-      <div className="glass-panel-strong p-5">
+    <section className="grid min-w-0 gap-4 md:gap-6">
+      <div className="glass-panel-strong min-w-0 p-4 sm:p-5">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
             <div className="metric-label">Comparison view</div>
@@ -45,7 +45,7 @@ export function CompareScenarios({ analyses }: CompareScenariosProps) {
           </span>
         </div>
 
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-5 flex min-w-0 flex-wrap gap-2">
           {analyses.map((analysis) => {
             const isSelected = selected.includes(analysis.scenarioName);
             return (
@@ -54,7 +54,7 @@ export function CompareScenarios({ analyses }: CompareScenariosProps) {
                 type="button"
                 onClick={() => toggleScenario(analysis.scenarioName)}
                 className={cn(
-                  "inline-flex min-h-10 items-center gap-2 rounded-lg border px-3 text-sm font-semibold transition",
+                  "inline-flex min-h-11 max-w-full items-center gap-2 rounded-lg border px-3 text-sm font-semibold transition sm:min-h-10",
                   isSelected
                     ? "border-cyan-200/30 bg-cyan-300/[0.12] text-cyan-100"
                     : "border-white/10 bg-white/[0.035] text-slate-300 hover:bg-white/[0.065]",
@@ -62,7 +62,7 @@ export function CompareScenarios({ analyses }: CompareScenariosProps) {
                 aria-pressed={isSelected}
               >
                 {isSelected ? <Minus className="size-4" aria-hidden="true" /> : <Plus className="size-4" aria-hidden="true" />}
-                {analysis.scenarioName}
+                <span className="min-w-0 truncate">{analysis.scenarioName}</span>
               </button>
             );
           })}
@@ -73,10 +73,10 @@ export function CompareScenarios({ analyses }: CompareScenariosProps) {
         <div className="glass-panel p-8 text-center text-slate-300">Select at least one scenario to compare.</div>
       ) : (
         <>
-          <div className="glass-panel p-5">
-            <div className="h-[320px] w-full">
+          <div className="glass-panel min-w-0 overflow-hidden p-4 sm:p-5">
+            <div className="h-[260px] w-full sm:h-[320px]">
               <ResponsiveContainer>
-                <BarChart data={chartData} margin={{ top: 12, right: 8, left: -18, bottom: 12 }}>
+                <BarChart data={chartData} margin={{ top: 12, right: 4, left: -28, bottom: 12 }}>
                   <CartesianGrid vertical={false} stroke="var(--subtle-border)" />
                   <XAxis dataKey="scenario" tick={{ fill: "var(--muted-text)", fontSize: 12 }} interval={0} />
                   <YAxis tick={{ fill: "var(--soft-text)", fontSize: 12 }} domain={[0, 100]} />
@@ -94,11 +94,11 @@ export function CompareScenarios({ analyses }: CompareScenariosProps) {
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3">
             {selectedAnalyses.map((analysis, index) => (
               <motion.article
                 key={analysis.scenarioName}
-                className="glass-panel card-hover p-5"
+                className="glass-panel card-hover min-w-0 p-4 sm:p-5"
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35, delay: index * 0.04 }}
@@ -110,7 +110,7 @@ export function CompareScenarios({ analyses }: CompareScenariosProps) {
                   </span>
                 </div>
 
-                <div className="mt-4 grid grid-cols-3 gap-2">
+                <div className="mt-4 grid grid-cols-1 gap-2 min-[420px]:grid-cols-3">
                   <MiniMetric label="Score" value={`${analysis.evaluation.normalizedScore}`} />
                   <MiniMetric label="Reports" value={`${analysis.evaluation.incidentCount}`} />
                   <MiniMetric label="Confidence" value={analysis.evaluation.confidence.label} />

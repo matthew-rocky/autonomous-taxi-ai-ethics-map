@@ -18,7 +18,7 @@ interface CategoryBreakdownProps {
 
 export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
   return (
-    <section className="glass-panel p-5">
+    <section className="glass-panel min-w-0 p-4 sm:p-5">
       <div>
         <div className="metric-label">Category breakdown</div>
         <h2 className="mt-1 text-xl font-semibold text-white">Ethical pressure points</h2>
@@ -31,19 +31,19 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
           return (
             <motion.article
               key={category.key}
-              className="subtle-panel card-hover p-4"
+              className="subtle-panel card-hover min-w-0 p-4"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: index * 0.04 }}
             >
               <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3">
                   <span
                     className={`flex size-10 items-center justify-center rounded-lg bg-gradient-to-br ${categoryTone[category.tone]}`}
                   >
                     <Icon className="size-5 text-slate-950" aria-hidden="true" />
                   </span>
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="font-semibold text-white">{category.name}</h3>
                     <p className="mt-1 text-xs leading-5 text-slate-400">{category.summary}</p>
                   </div>

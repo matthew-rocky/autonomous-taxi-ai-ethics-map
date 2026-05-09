@@ -112,12 +112,12 @@ export function LocationPlacementDock({
 
   return (
     <div
-      className="pointer-events-auto mx-auto flex w-fit max-w-full flex-col items-center gap-2"
+      className="pointer-events-auto mx-auto flex w-full max-w-full flex-col items-center gap-2 sm:w-fit"
       data-tour="pickup-dropoff-controls"
       onMouseDown={stopDockEvent}
       onClick={stopDockEvent}
     >
-      <div className="map-dock map-dock-strong flex max-w-full flex-wrap items-center justify-center gap-1.5 rounded-2xl border border-white/[0.12] bg-slate-950/78 p-1.5 shadow-[0_18px_60px_rgba(0,0,0,0.38),0_0_42px_rgba(34,211,238,0.10)] backdrop-blur-2xl">
+      <div className="map-dock map-dock-strong flex w-full max-w-full flex-wrap items-center justify-center gap-1.5 rounded-2xl border border-white/[0.12] bg-slate-950/78 p-1.5 shadow-[0_18px_60px_rgba(0,0,0,0.38),0_0_42px_rgba(34,211,238,0.10)] backdrop-blur-2xl sm:w-auto">
         <DockButton
           icon={MapPin}
           label="Pickup"
@@ -137,7 +137,7 @@ export function LocationPlacementDock({
         {mapInteractionMode !== "explore" ? (
           <button
             type="button"
-            className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.055] text-slate-200 transition hover:border-cyan-200/25 hover:bg-white/[0.10] hover:text-white"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.055] text-slate-200 transition hover:border-cyan-200/25 hover:bg-white/[0.10] hover:text-white sm:min-h-9 sm:min-w-9"
             onClick={onCancelPlacement}
             aria-label="Cancel placement"
             title="Cancel"
@@ -168,11 +168,11 @@ export function LocationPlacementDock({
               }
             }}
             placeholder={searchTarget === "pickup" ? "Search pickup address" : "Search drop-off address"}
-            className="min-h-9 min-w-0 rounded-xl border border-white/10 bg-slate-950/75 px-3 text-xs font-semibold text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-200/40"
+            className="min-h-11 min-w-0 rounded-xl border border-white/10 bg-slate-950/75 px-3 text-xs font-semibold text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-200/40 sm:min-h-9"
           />
           <button
             type="button"
-            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-cyan-200/25 bg-cyan-300/[0.14] px-3 text-xs font-bold text-cyan-50 transition hover:bg-cyan-300/[0.2] disabled:cursor-not-allowed disabled:opacity-55"
+            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-cyan-200/25 bg-cyan-300/[0.14] px-3 text-xs font-bold text-cyan-50 transition hover:bg-cyan-300/[0.2] disabled:cursor-not-allowed disabled:opacity-55 sm:min-h-9"
             onClick={() => void searchLocation()}
             disabled={loading}
           >
@@ -206,7 +206,7 @@ function DockButton({
     <button
       type="button"
       className={cn(
-        "inline-flex min-h-9 min-w-0 items-center justify-center gap-1.5 rounded-xl border px-2.5 text-xs font-bold transition",
+        "inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl border px-2 text-xs font-bold transition sm:min-h-9 sm:flex-none sm:px-2.5",
         active
           ? "border-cyan-200/45 bg-cyan-300/[0.18] text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.2)]"
           : "border-white/10 bg-white/[0.045] text-slate-300 hover:border-cyan-200/25 hover:bg-white/[0.08] hover:text-white",

@@ -13,7 +13,7 @@ export function RiskScoreCard({ evaluation }: RiskScoreCardProps) {
 
   return (
     <motion.section
-      className="glass-panel-strong p-5"
+      className="glass-panel-strong min-w-0 p-4 sm:p-5"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
@@ -26,8 +26,8 @@ export function RiskScoreCard({ evaluation }: RiskScoreCardProps) {
         <Gauge className="size-5 text-cyan-200" aria-hidden="true" />
       </div>
 
-      <div className="mt-7 grid gap-6 sm:grid-cols-[190px_1fr] sm:items-center">
-        <div className="relative mx-auto size-44">
+      <div className="mt-6 grid min-w-0 gap-5 sm:mt-7 sm:grid-cols-[190px_1fr] sm:items-center sm:gap-6">
+        <div className="relative mx-auto size-36 sm:size-44">
           <motion.div
             className="absolute inset-0 rounded-full"
             initial={{ background: "conic-gradient(from 180deg, #22d3ee 0deg, rgba(255,255,255,0.08) 0deg)" }}
@@ -40,7 +40,7 @@ export function RiskScoreCard({ evaluation }: RiskScoreCardProps) {
           />
           <div className="absolute inset-4 rounded-full border border-white/10 bg-slate-950/90 backdrop-blur-xl" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span className="text-5xl font-semibold text-white">{score}</span>
+            <span className="text-4xl font-semibold text-white sm:text-5xl">{score}</span>
             <span className="mt-1 text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">out of 100</span>
           </div>
         </div>
@@ -58,7 +58,7 @@ export function RiskScoreCard({ evaluation }: RiskScoreCardProps) {
 
           <p className="muted-copy">{evaluation.evidence}</p>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-3 sm:grid-cols-3">
             <Metric icon={Activity} label="Raw signal" value={evaluation.score.toFixed(2)} />
             <Metric icon={ShieldAlert} label="Reports" value={String(evaluation.incidentCount)} />
             <Metric label="Nearest signal" value={formatDistance(evaluation.distanceToNearestReportKm)} />

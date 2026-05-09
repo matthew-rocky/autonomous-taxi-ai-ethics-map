@@ -10,7 +10,7 @@ export function WhyRecommendationPanel({ analysis }: WhyRecommendationPanelProps
   const { confidence } = analysis.evaluation;
 
   return (
-    <section className="glass-panel p-5">
+    <section className="glass-panel min-w-0 p-4 sm:p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div className="metric-label">Plain-English rationale</div>
@@ -47,9 +47,9 @@ export function WhyRecommendationPanel({ analysis }: WhyRecommendationPanelProps
 
 function ReasonItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+    <div className="min-w-0 rounded-lg border border-white/10 bg-white/[0.04] p-4">
       <div className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">{label}</div>
-      <div className="mt-2 text-sm font-semibold leading-6 text-white">{value}</div>
+      <div className="mt-2 break-words text-sm font-semibold leading-6 text-white">{value}</div>
     </div>
   );
 }

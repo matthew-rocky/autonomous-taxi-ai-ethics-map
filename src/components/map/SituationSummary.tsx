@@ -25,7 +25,7 @@ export function SituationSummary({ reports, pickup, dropoff }: SituationSummaryP
         </div>
         <button
           type="button"
-          className="ghost-button min-h-9 px-2"
+          className="ghost-button min-h-11 px-2 sm:min-h-9"
           onClick={() => setExpanded((current) => !current)}
           aria-expanded={expanded}
         >

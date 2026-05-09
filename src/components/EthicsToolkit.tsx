@@ -158,10 +158,10 @@ export function EthicsToolkit() {
   );
 
   return (
-    <section className="grid gap-6">
+    <section className="grid min-w-0 gap-4 md:gap-6">
       <ToolkitHero />
 
-      <section className="grid gap-3 lg:grid-cols-3">
+      <section className="grid min-w-0 gap-3 lg:grid-cols-3">
         {tools.map((tool, index) => (
           <ToolCard
             key={tool.id}
@@ -175,7 +175,7 @@ export function EthicsToolkit() {
 
       <motion.section
         layout
-        className="glass-panel-strong overflow-hidden p-5"
+        className="glass-panel-strong min-w-0 overflow-hidden p-4 sm:p-5"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.36, ease: "easeOut" }}
@@ -206,7 +206,7 @@ export function EthicsToolkit() {
         </AnimatePresence>
       </motion.section>
 
-      <section className="grid gap-4 xl:grid-cols-[0.92fr_1.08fr]">
+      <section className="grid min-w-0 gap-4 xl:grid-cols-[0.92fr_1.08fr]">
         <EthicsPriorityRadar />
         <ConfidenceFlow />
       </section>
@@ -217,16 +217,16 @@ export function EthicsToolkit() {
 function ToolkitHero() {
   return (
     <motion.section
-      className="glass-panel-strong relative overflow-hidden p-6"
+      className="glass-panel-strong relative min-w-0 overflow-hidden p-4 sm:p-6"
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.42, ease: "easeOut" }}
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/50 to-transparent" />
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_310px] lg:items-center">
+      <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1fr)_310px] lg:items-center">
         <div>
           <div className="metric-label">Design Tools</div>
-          <h1 className="mt-2 text-4xl font-semibold tracking-normal text-white md:text-5xl">Ethics Design Toolkit</h1>
+          <h1 className="mt-2 text-3xl font-semibold tracking-normal text-white md:text-5xl">Ethics Design Toolkit</h1>
           <p className="mt-3 max-w-3xl text-base leading-7 text-slate-300">
             How the Robo-Cab makes uncertainty visible instead of pretending perfect detection.
           </p>
@@ -236,19 +236,19 @@ function ToolkitHero() {
           </p>
         </div>
 
-        <div className="relative min-h-[220px] overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] p-5">
+        <div className="relative min-h-[170px] overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] p-4 sm:min-h-[220px] sm:p-5">
           <motion.div
-            className="absolute left-1/2 top-1/2 size-32 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-200/25"
+            className="absolute left-1/2 top-1/2 size-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-200/25 sm:size-32"
             animate={{ rotate: 360 }}
             transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
           />
           <motion.div
-            className="absolute left-1/2 top-1/2 size-48 -translate-x-1/2 -translate-y-1/2 rounded-full border border-violet-200/15"
+            className="absolute left-1/2 top-1/2 size-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-violet-200/15 sm:size-48"
             animate={{ rotate: -360 }}
             transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
           />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.15),transparent_58%)]" />
-          <div className="relative z-10 flex h-full min-h-[180px] flex-col items-center justify-center text-center">
+          <div className="relative z-10 flex h-full min-h-[140px] flex-col items-center justify-center text-center sm:min-h-[180px]">
             <span className="flex size-16 items-center justify-center rounded-lg border border-cyan-200/25 bg-cyan-300/[0.12] text-cyan-100 shadow-[0_0_45px_rgba(34,211,238,0.20)]">
               <BrainCircuit className="size-8" aria-hidden="true" />
             </span>
@@ -283,7 +283,7 @@ function ToolCard({
       type="button"
       layout
       className={cn(
-        "group min-h-[230px] min-w-0 rounded-lg border p-5 text-left transition duration-200",
+        "group min-h-[190px] min-w-0 rounded-lg border p-4 text-left transition duration-200 sm:min-h-[230px] sm:p-5",
         "bg-[linear-gradient(145deg,rgba(255,255,255,0.07),rgba(255,255,255,0.035))]",
         active
           ? "border-cyan-200/35 shadow-[0_22px_70px_rgba(34,211,238,0.12)]"
@@ -317,7 +317,7 @@ function ToolCard({
 
 function ValueMap({ connectedValues }: { connectedValues: Set<string> }) {
   return (
-    <div className="mt-5 grid gap-5 xl:grid-cols-[1fr_1.08fr]">
+    <div className="mt-5 grid min-w-0 gap-5 xl:grid-cols-[1fr_1.08fr]">
       <div className="grid gap-4">
         <div className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-cyan-100">
@@ -354,7 +354,7 @@ function ValueMap({ connectedValues }: { connectedValues: Set<string> }) {
         </div>
       </div>
 
-      <div className="relative min-h-[360px] overflow-hidden rounded-lg border border-white/10 bg-slate-950/45 p-4">
+      <div className="relative min-h-[280px] overflow-hidden rounded-lg border border-white/10 bg-slate-950/45 p-3 sm:min-h-[360px] sm:p-4">
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 620 360" preserveAspectRatio="none" aria-hidden="true">
           {networkLines.map((line, index) => (
             <motion.path
@@ -375,7 +375,7 @@ function ValueMap({ connectedValues }: { connectedValues: Set<string> }) {
           <motion.div
             key={node.label}
             className={cn(
-              "absolute max-w-[138px] -translate-x-1/2 -translate-y-1/2 rounded-lg border px-3 py-2 text-center text-xs font-bold shadow-[0_18px_44px_rgba(0,0,0,0.24)] backdrop-blur",
+              "absolute max-w-[112px] -translate-x-1/2 -translate-y-1/2 rounded-lg border px-2 py-1.5 text-center text-[0.68rem] font-bold shadow-[0_18px_44px_rgba(0,0,0,0.24)] backdrop-blur sm:max-w-[138px] sm:px-3 sm:py-2 sm:text-xs",
               node.kind === "stakeholder"
                 ? "border-cyan-200/25 bg-cyan-300/[0.13] text-cyan-50"
                 : "border-violet-200/25 bg-violet-300/[0.13] text-violet-50",
@@ -435,7 +435,7 @@ const networkLines = [
 
 function MetaphorPanel() {
   return (
-    <div className="mt-5 grid gap-5 xl:grid-cols-[0.95fr_1.05fr]">
+    <div className="mt-5 grid min-w-0 gap-5 xl:grid-cols-[0.95fr_1.05fr]">
       <div className="grid gap-3">
         <MetaphorCard
           label="Old metaphor"
@@ -513,7 +513,7 @@ function MetaphorCard({
 
 function FailureModePanel() {
   return (
-    <div className="mt-5 grid gap-5 xl:grid-cols-[0.86fr_1.14fr]">
+    <div className="mt-5 grid min-w-0 gap-5 xl:grid-cols-[0.86fr_1.14fr]">
       <div className="rounded-lg border border-rose-200/25 bg-rose-300/[0.09] p-5">
         <div className="flex items-center gap-2 text-sm font-bold text-rose-100">
           <AlertTriangle className="size-4" aria-hidden="true" />
@@ -559,7 +559,7 @@ function FailureModePanel() {
 function EthicsPriorityRadar() {
   return (
     <motion.section
-      className="glass-panel p-5"
+      className="glass-panel min-w-0 overflow-hidden p-4 sm:p-5"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.34, ease: "easeOut" }}
@@ -573,11 +573,11 @@ function EthicsPriorityRadar() {
           Design weight
         </span>
       </div>
-      <div className="mt-4 h-[300px]">
+      <div className="mt-4 h-[250px] sm:h-[300px]">
         <ResponsiveContainer>
           <RechartsRadarChart data={radarData} outerRadius="72%">
             <PolarGrid stroke="var(--subtle-border)" />
-            <PolarAngleAxis dataKey="subject" tick={{ fill: "var(--muted-text)", fontSize: 12 }} />
+            <PolarAngleAxis dataKey="subject" tick={{ fill: "var(--muted-text)", fontSize: 10 }} />
             <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: "var(--soft-text)", fontSize: 10 }} />
             <Radar
               name="Priority"
@@ -614,7 +614,7 @@ function EthicsPriorityRadar() {
 function ConfidenceFlow() {
   return (
     <motion.section
-      className="glass-panel p-5"
+      className="glass-panel min-w-0 p-4 sm:p-5"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.34, delay: 0.04, ease: "easeOut" }}

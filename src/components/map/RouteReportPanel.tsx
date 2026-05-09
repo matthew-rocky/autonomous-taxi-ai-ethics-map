@@ -62,7 +62,7 @@ export function RouteReportPanel({
                   type="button"
                   onClick={() => onUrgencyChange(level)}
                   className={cn(
-                    "min-h-9 rounded-lg border px-3 text-xs font-semibold transition",
+                    "min-h-11 rounded-lg border px-3 text-xs font-semibold transition sm:min-h-9",
                     urgency === level ? urgencyTone(level) : "border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.07]",
                   )}
                 >

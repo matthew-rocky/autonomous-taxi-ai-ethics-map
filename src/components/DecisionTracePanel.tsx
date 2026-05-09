@@ -18,7 +18,7 @@ export function DecisionTracePanel({ analysis }: DecisionTracePanelProps) {
   ];
 
   return (
-    <section className="glass-panel p-5">
+    <section className="glass-panel min-w-0 p-4 sm:p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="metric-label">Accountability</div>
@@ -29,9 +29,9 @@ export function DecisionTracePanel({ analysis }: DecisionTracePanelProps) {
 
       <div className="mt-5 grid gap-2">
         {rows.map(([label, value]) => (
-          <div key={label} className="grid gap-2 rounded-lg border border-white/10 bg-white/[0.04] p-3 sm:grid-cols-[190px_1fr]">
+          <div key={label} className="grid min-w-0 gap-2 rounded-lg border border-white/10 bg-white/[0.04] p-3 sm:grid-cols-[190px_1fr]">
             <div className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">{label}</div>
-            <div className="text-sm font-semibold leading-6 text-slate-100">{value}</div>
+            <div className="break-words text-sm font-semibold leading-6 text-slate-100">{value}</div>
           </div>
         ))}
       </div>

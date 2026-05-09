@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import L from "leaflet";
-import { CheckCircle2, Info, MapPinned, Navigation } from "lucide-react";
+import { CheckCircle2, Info, Layers3, MapPinned, Navigation, X } from "lucide-react";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Circle, CircleMarker, Marker, Pane, Polyline, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import { bywardUnfoldingReports, initialMapFilters, mockReports } from "@/data/reports";
@@ -89,7 +89,9 @@ export function MapReportView() {
   const [safePointSuggestionsLoading, setSafePointSuggestionsLoading] = useState(false);
   const [ignoredSafeSuggestionIds, setIgnoredSafeSuggestionIds] = useState<string[]>([]);
   const [toastMessage, setToastMessage] = useState("");
+  const [mobileSheet, setMobileSheet] = useState<"report" | "layers" | "status" | null>(null);
   const mapShellRef = useRef<HTMLElement | null>(null);
+  const compactMapLayout = useMediaQuery("(max-width: 1023px)");
   const hasRouteSelection = Boolean(pickup && dropoff && reportingMode === "route");
   const placementActive = mapInteractionMode !== "explore";
   const pickupDisplayLabel = useReverseGeocodedRouteLabel(pickup, "pickup");
@@ -164,6 +166,10 @@ export function MapReportView() {
     const timeout = window.setTimeout(() => setToastMessage(""), 2600);
     return () => window.clearTimeout(timeout);
   }, [toastMessage]);
+
+  useEffect(() => {
+    setMobileSheet(null);
+  }, [reportingMode]);
 
   useEffect(() => {
     if (mapInteractionMode === "explore") return;
@@ -577,22 +583,178 @@ export function MapReportView() {
     setFocusPoint(caseDropoff);
     setMapInteractionMode("explore");
     setSelectedRouteOption("safest");
-    setRoutePreviewOpen(true);
+    setRoutePreviewOpen(!compactMapLayout);
     setShowAllRoutes(true);
     setShowOnlyRouteRisks(false);
     setAvoidHighRiskZones(true);
     setIgnoredSafeSuggestionIds([]);
     setSubmittedReport(null);
+    setMobileSheet(null);
     setStatusMessage(
       "ByWard Market: Unfolding Incident loaded. Destination conditions are uncertain because signals are sparse, conflicting, or not recently verified.",
     );
   };
 
+  const reportPanelContent = (
+    <>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div className="metric-label">Live confidence map</div>
+          <h1 className="mt-1 text-xl font-semibold tracking-normal text-white sm:text-2xl">
+            {reportingMode === "route" ? "Confidence-Aware Route" : "Report Area"}
+          </h1>
+          <p className="mt-2 text-sm leading-6 text-slate-300">
+            {reportingMode === "route"
+              ? "Choose pickup and drop-off points; the system shows uncertainty instead of pretending perfect detection."
+              : "Report a specific area, radius, and severity directly on the map."}
+          </p>
+        </div>
+        <span className="flex size-11 shrink-0 items-center justify-center rounded-lg border border-cyan-200/25 bg-cyan-300/10 text-cyan-100">
+          <Navigation className="size-5" aria-hidden="true" />
+        </span>
+      </div>
+
+      <div className="mt-4">
+        <ReportModeSelector mode={reportingMode} onModeChange={changeReportingMode} />
+      </div>
+
+      <button
+        type="button"
+        className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-orange-200/25 bg-orange-300/[0.10] px-3 text-sm font-bold text-orange-100 transition hover:bg-orange-300/[0.16]"
+        onClick={loadByWardCaseStudy}
+      >
+        <MapPinned className="size-4" aria-hidden="true" />
+        ByWard Market: Unfolding Incident
+      </button>
+
+      <div className="mt-4 rounded-lg border border-cyan-200/20 bg-cyan-300/10 p-3 text-sm leading-6 text-cyan-50">
+        {statusMessage}
+      </div>
+      {reportingMode === "route" && dropoffConfidence ? (
+        <div className="mt-3 rounded-lg border border-white/10 bg-white/[0.04] p-3">
+          <ConfidenceBadge confidence={dropoffConfidence} />
+          <p className="mt-2 text-xs leading-5 text-slate-300">
+            {dropoffConfidence.noAlertMessage}
+          </p>
+        </div>
+      ) : null}
+      {reportingMode === "route" && safePointSuggestionsLoading ? (
+        <div className="mt-3 rounded-lg border border-cyan-200/20 bg-cyan-300/[0.08] p-3 text-xs font-semibold leading-5 text-cyan-50">
+          Checking nearby road-accessible handoff points...
+        </div>
+      ) : null}
+      {reportingMode === "route" && activeSafePointSuggestions.length > 0 ? (
+        <div className="mt-3 rounded-lg border border-amber-200/25 bg-amber-300/[0.10] p-3 text-xs font-semibold leading-5 text-amber-50">
+          {activeSafePointSuggestions.map((suggestion) => `Safer ${endpointLabel(suggestion.type)} suggested`).join(" and ")} near a low-confidence area.
+        </div>
+      ) : null}
+      {reportingMode === "route" && !safePointSuggestionsLoading && safePointSuggestionWarnings.length > 0 ? (
+        <div className="mt-3 rounded-lg border border-amber-200/25 bg-slate-950/65 p-3 text-xs font-semibold leading-5 text-amber-50">
+          No higher-confidence road-accessible suggestion found nearby. Try choosing a different pickup/drop-off location.
+        </div>
+      ) : null}
+
+      <div className="mt-4">
+        {reportingMode === "route" ? (
+          <RouteReportPanel
+            pickup={pickup}
+            dropoff={dropoff}
+            issueType={issueType}
+            urgency={urgency}
+            notes={notes}
+            distanceKm={distanceKm}
+            onIssueTypeChange={setIssueType}
+            onUrgencyChange={setUrgency}
+            onNotesChange={setNotes}
+            onSubmit={submitRouteReport}
+          />
+        ) : (
+          <AreaReportPanel
+            mapInteractionMode={mapInteractionMode}
+            areaCenter={areaCenter}
+            areaTitle={areaTitle}
+            areaIssueType={areaIssueType}
+            areaSeverity={areaSeverity}
+            areaRadiusMeters={areaRadiusMeters}
+            areaNotes={areaNotes}
+            onAreaCenterChange={(point) => {
+              setAreaCenter(point);
+              setFocusPoint(point);
+              setMapInteractionMode("explore");
+              setSubmittedReport(null);
+            }}
+            onStartAreaPlacement={() => startPlacementMode("set-area")}
+            onUseCurrentLocation={useCurrentAreaLocation}
+            onAreaTitleChange={setAreaTitle}
+            onAreaIssueTypeChange={setAreaIssueType}
+            onAreaSeverityChange={setAreaSeverity}
+            onAreaRadiusChange={setAreaRadiusMeters}
+            onAreaNotesChange={setAreaNotes}
+            onSubmit={submitAreaReport}
+            onReset={resetArea}
+            onStatus={setStatusMessage}
+          />
+        )}
+      </div>
+    </>
+  );
+
+  const signalPanelContent = (
+    <>
+      <SituationSummary reports={visibleReports} pickup={pickup} dropoff={dropoff} />
+      <MapFilters filters={filters} onFiltersChange={setFilters} />
+      <div className="map-dock pointer-events-auto rounded-2xl border border-white/[0.12] bg-slate-950/65 p-3 shadow-[0_24px_80px_rgba(0,0,0,0.36)] backdrop-blur-2xl">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <div className="metric-label">Confidence intelligence</div>
+            <h2 className="mt-1 text-lg font-semibold text-white">Live signal state</h2>
+          </div>
+          <Info className="size-5 text-cyan-200" aria-hidden="true" />
+        </div>
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          <StateMetric label="Pickup" value={pickup ? "Set" : "Open"} />
+          <StateMetric label="Drop-off" value={dropoff ? "Set" : "Open"} />
+          <StateMetric label="Confidence" value={dropoffConfidence?.label ?? "Open"} />
+        </div>
+        <p className="mt-3 text-xs leading-5 text-slate-300">
+          {dataWarning || "No active alerts does not guarantee safety. Confidence is recalculated as signals change."}
+        </p>
+      </div>
+      <MapLegend />
+    </>
+  );
+
+  const areaStatusContent = reportingMode === "area" ? (
+    <>
+      <div className="flex items-start gap-3">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-violet-200/25 bg-violet-300/10 text-violet-100">
+          {submittedReport ? <CheckCircle2 className="size-5" aria-hidden="true" /> : <MapPinned className="size-5" aria-hidden="true" />}
+        </span>
+        <div>
+          <h2 className="font-semibold text-white">
+            {submittedReport ? "Report submitted" : "Click-to-place area reporting"}
+          </h2>
+          <p className="mt-1 text-sm leading-6 text-slate-300">
+            {submittedReport
+              ? `${submittedReport.kind === "route" ? "Route" : "Area"} report - ${submittedReport.issueType} - ${
+                  submittedReport.summary
+                } - ${submittedReport.submittedAt}`
+              : "Click directly on the map, search a place, or use current location to set the reported area."}
+          </p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 text-sm font-semibold text-cyan-100 md:justify-end">
+        <Navigation className="size-4" aria-hidden="true" />
+        {mapInteractionMode === "set-area" ? "Click map to place area" : "Explore mode active"}
+      </div>
+    </>
+  ) : null;
+
   return (
     <section
       ref={mapShellRef}
       tabIndex={-1}
-      className="isolate relative -mx-4 -mt-2 h-[calc(100vh-73px)] min-h-[760px] overflow-hidden outline-none sm:-mx-6 lg:-mx-8"
+      className="isolate relative -mx-3 -mt-2 h-[calc(100svh-7.75rem)] min-h-[520px] overflow-hidden outline-none sm:-mx-5 sm:h-[calc(100svh-8rem)] sm:min-h-[620px] lg:-mx-8 lg:h-[calc(100vh-73px)] lg:min-h-[760px] 2xl:-mx-10"
     >
       <div className="absolute inset-0 z-0">
         <OttawaMapCanvas
@@ -603,6 +765,7 @@ export function MapReportView() {
           className={cn(mapInteractionMode !== "explore" && "map-placement-active")}
           zoomControlPosition="bottomright"
         >
+          <InvalidateMapSize trigger={`${compactMapLayout}-${mobileSheet ?? "closed"}-${routePreviewOpen}-${reportingMode}`} />
           <MapClickHandler
             interactionMode={mapInteractionMode}
             onPlace={(interactionMode, point) => placePoint(interactionMode, point)}
@@ -840,188 +1003,105 @@ export function MapReportView() {
       <div className="map-vignette-top pointer-events-none absolute inset-x-0 top-0 z-[901] h-32" />
       <div className="map-vignette-bottom pointer-events-none absolute inset-x-0 bottom-0 z-[901] h-40" />
 
-      <div className="pointer-events-none relative z-[1100] flex h-full flex-col justify-between gap-4 p-3 sm:p-4 lg:p-6">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-          <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.42, ease: "easeOut" }}
-            data-tour="report-panel"
-            className={cn(
-              "map-dock pointer-events-auto w-full max-w-[430px] overflow-auto rounded-2xl border border-white/[0.12] bg-slate-950/[0.68] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-2xl",
-              hasRouteSelection ? "max-h-[calc(100vh-318px)]" : "max-h-[calc(100vh-108px)]",
-            )}
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <div className="metric-label">Live confidence map</div>
-                <h1 className="mt-1 text-2xl font-semibold tracking-normal text-white">
-                  {reportingMode === "route" ? "Confidence-Aware Route" : "Report Area"}
-                </h1>
-                <p className="mt-2 text-sm leading-6 text-slate-300">
-                  {reportingMode === "route"
-                    ? "Choose pickup and drop-off points; the system shows uncertainty instead of pretending perfect detection."
-                    : "Report a specific area, radius, and severity directly on the map."}
-                </p>
-              </div>
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-lg border border-cyan-200/25 bg-cyan-300/10 text-cyan-100">
-                <Navigation className="size-5" aria-hidden="true" />
-              </span>
-            </div>
-
-            <div className="mt-4">
-              <ReportModeSelector mode={reportingMode} onModeChange={changeReportingMode} />
-            </div>
-
-            <button
-              type="button"
-              className="mt-3 inline-flex w-full min-h-10 items-center justify-center gap-2 rounded-lg border border-orange-200/25 bg-orange-300/[0.10] px-3 text-sm font-bold text-orange-100 transition hover:bg-orange-300/[0.16]"
-              onClick={loadByWardCaseStudy}
-            >
-              <MapPinned className="size-4" aria-hidden="true" />
-              ByWard Market: Unfolding Incident
-            </button>
-
-            <div className="mt-4 rounded-lg border border-cyan-200/20 bg-cyan-300/10 p-3 text-sm leading-6 text-cyan-50">
-              {statusMessage}
-            </div>
-            {reportingMode === "route" && dropoffConfidence ? (
-              <div className="mt-3 rounded-lg border border-white/10 bg-white/[0.04] p-3">
-                <ConfidenceBadge confidence={dropoffConfidence} />
-                <p className="mt-2 text-xs leading-5 text-slate-300">
-                  {dropoffConfidence.noAlertMessage}
-                </p>
-              </div>
-            ) : null}
-            {reportingMode === "route" && safePointSuggestionsLoading ? (
-              <div className="mt-3 rounded-lg border border-cyan-200/20 bg-cyan-300/[0.08] p-3 text-xs font-semibold leading-5 text-cyan-50">
-                Checking nearby road-accessible handoff points...
-              </div>
-            ) : null}
-            {reportingMode === "route" && activeSafePointSuggestions.length > 0 ? (
-              <div className="mt-3 rounded-lg border border-amber-200/25 bg-amber-300/[0.10] p-3 text-xs font-semibold leading-5 text-amber-50">
-                {activeSafePointSuggestions.map((suggestion) => `Safer ${endpointLabel(suggestion.type)} suggested`).join(" and ")} near a low-confidence area.
-              </div>
-            ) : null}
-            {reportingMode === "route" && !safePointSuggestionsLoading && safePointSuggestionWarnings.length > 0 ? (
-              <div className="mt-3 rounded-lg border border-amber-200/25 bg-slate-950/65 p-3 text-xs font-semibold leading-5 text-amber-50">
-                No higher-confidence road-accessible suggestion found nearby. Try choosing a different pickup/drop-off location.
-              </div>
-            ) : null}
-
-            <div className="mt-4">
-              {reportingMode === "route" ? (
-                <RouteReportPanel
-                  pickup={pickup}
-                  dropoff={dropoff}
-                  issueType={issueType}
-                  urgency={urgency}
-                  notes={notes}
-                  distanceKm={distanceKm}
-                  onIssueTypeChange={setIssueType}
-                  onUrgencyChange={setUrgency}
-                  onNotesChange={setNotes}
-                  onSubmit={submitRouteReport}
-                />
-              ) : (
-                <AreaReportPanel
-                  mapInteractionMode={mapInteractionMode}
-                  areaCenter={areaCenter}
-                  areaTitle={areaTitle}
-                  areaIssueType={areaIssueType}
-                  areaSeverity={areaSeverity}
-                  areaRadiusMeters={areaRadiusMeters}
-                  areaNotes={areaNotes}
-                  onAreaCenterChange={(point) => {
-                    setAreaCenter(point);
-                    setFocusPoint(point);
-                    setMapInteractionMode("explore");
-                    setSubmittedReport(null);
-                  }}
-                  onStartAreaPlacement={() => startPlacementMode("set-area")}
-                  onUseCurrentLocation={useCurrentAreaLocation}
-                  onAreaTitleChange={setAreaTitle}
-                  onAreaIssueTypeChange={setAreaIssueType}
-                  onAreaSeverityChange={setAreaSeverity}
-                  onAreaRadiusChange={setAreaRadiusMeters}
-                  onAreaNotesChange={setAreaNotes}
-                  onSubmit={submitAreaReport}
-                  onReset={resetArea}
-                  onStatus={setStatusMessage}
-                />
+      {!compactMapLayout ? (
+        <div className="pointer-events-none relative z-[1100] flex h-full flex-col justify-between gap-4 p-6">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+            <motion.div
+              initial={{ opacity: 0, x: -24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.42, ease: "easeOut" }}
+              data-tour="report-panel"
+              className={cn(
+                "map-dock pointer-events-auto w-full max-w-[430px] overflow-auto rounded-2xl border border-white/[0.12] bg-slate-950/[0.68] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-2xl",
+                hasRouteSelection ? "max-h-[calc(100vh-318px)]" : "max-h-[calc(100vh-108px)]",
               )}
-            </div>
-          </motion.div>
+            >
+              {reportPanelContent}
+            </motion.div>
 
-          <motion.div
-            className="right-panel-stack grid w-full max-w-[360px] gap-3 overflow-y-auto pr-1 xl:mt-0"
-            initial={{ opacity: 0, x: 24 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.42, delay: 0.06, ease: "easeOut" }}
-          >
-            <SituationSummary reports={visibleReports} pickup={pickup} dropoff={dropoff} />
-            <MapFilters filters={filters} onFiltersChange={setFilters} />
-            <div className="map-dock pointer-events-auto rounded-2xl border border-white/[0.12] bg-slate-950/65 p-3 shadow-[0_24px_80px_rgba(0,0,0,0.36)] backdrop-blur-2xl">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <div className="metric-label">Confidence intelligence</div>
-                  <h2 className="mt-1 text-lg font-semibold text-white">Live signal state</h2>
-                </div>
-                <Info className="size-5 text-cyan-200" aria-hidden="true" />
-              </div>
-              <div className="mt-4 grid grid-cols-3 gap-2">
-                <StateMetric label="Pickup" value={pickup ? "Set" : "Open"} />
-                <StateMetric label="Drop-off" value={dropoff ? "Set" : "Open"} />
-                <StateMetric label="Confidence" value={dropoffConfidence?.label ?? "Open"} />
-              </div>
-              <p className="mt-3 text-xs leading-5 text-slate-300">
-                {dataWarning || "No active alerts does not guarantee safety. Confidence is recalculated as signals change."}
-              </p>
-            </div>
-            <MapLegend />
-          </motion.div>
-        </div>
+            <motion.div
+              className="right-panel-stack grid w-full max-w-[360px] gap-3 overflow-y-auto pr-1 xl:mt-0"
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.42, delay: 0.06, ease: "easeOut" }}
+            >
+              {signalPanelContent}
+            </motion.div>
+          </div>
 
-        <div className="grid gap-3 lg:max-w-[450px]">
-          {pickup && dropoff && reportingMode === "route" && !routePreviewOpen ? (
-            <RouteRiskWarning riskyReports={riskyRouteReports} confidence={dropoffConfidence} />
+          <div className="grid gap-3 lg:max-w-[450px]">
+            {pickup && dropoff && reportingMode === "route" && !routePreviewOpen ? (
+              <RouteRiskWarning riskyReports={riskyRouteReports} confidence={dropoffConfidence} />
+            ) : null}
+          </div>
+
+          {areaStatusContent ? (
+            <motion.div
+              className="map-dock pointer-events-auto grid gap-3 rounded-2xl border border-white/[0.12] bg-slate-950/70 p-4 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl md:grid-cols-[1fr_auto]"
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.08, ease: "easeOut" }}
+            >
+              {areaStatusContent}
+            </motion.div>
           ) : null}
         </div>
+      ) : null}
 
-        {reportingMode === "area" ? (
-          <motion.div
-            className="map-dock pointer-events-auto grid gap-3 rounded-2xl border border-white/[0.12] bg-slate-950/70 p-4 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl md:grid-cols-[1fr_auto]"
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.08, ease: "easeOut" }}
-          >
-            <div className="flex items-start gap-3">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-violet-200/25 bg-violet-300/10 text-violet-100">
-                {submittedReport ? <CheckCircle2 className="size-5" aria-hidden="true" /> : <MapPinned className="size-5" aria-hidden="true" />}
-              </span>
-              <div>
-                <h2 className="font-semibold text-white">
-                  {submittedReport ? "Report submitted" : "Click-to-place area reporting"}
-                </h2>
-                <p className="mt-1 text-sm leading-6 text-slate-300">
-                  {submittedReport
-                    ? `${submittedReport.kind === "route" ? "Route" : "Area"} report - ${submittedReport.issueType} - ${
-                        submittedReport.summary
-                      } - ${submittedReport.submittedAt}`
-                    : "Click directly on the map, search a place, or use current location to set the reported area."}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-sm font-semibold text-cyan-100 md:justify-end">
-              <Navigation className="size-4" aria-hidden="true" />
-              {mapInteractionMode === "set-area" ? "Click map to place area" : "Explore mode active"}
-            </div>
-          </motion.div>
-        ) : null}
-      </div>
+      {compactMapLayout ? (
+        <>
+          <MobileMapActions activeSheet={mobileSheet} onSheetChange={setMobileSheet} />
+          <AnimatePresence initial={false}>
+            {mobileSheet ? (
+              <motion.div
+                className="pointer-events-none absolute inset-x-2 bottom-2 z-[1400]"
+                initial={{ opacity: 0, y: 34 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 34 }}
+                transition={{ duration: 0.24, ease: "easeOut" }}
+              >
+                <div className="map-dock map-dock-strong pointer-events-auto max-h-[min(72svh,560px)] overflow-y-auto rounded-2xl border border-white/[0.12] bg-slate-950/88 p-3 shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-2xl">
+                  <div className="sticky top-0 z-10 -mx-3 -mt-3 mb-3 flex items-center justify-between gap-3 border-b border-white/10 bg-[var(--map-dock-bg-strong)] px-3 py-3 backdrop-blur-2xl">
+                    <div>
+                      <div className="metric-label">Mobile map tools</div>
+                      <h2 className="mt-1 text-base font-semibold text-white">{mobileSheetTitle(mobileSheet)}</h2>
+                    </div>
+                    <button
+                      type="button"
+                      className="ghost-button min-h-11 min-w-11 px-0"
+                      onClick={() => setMobileSheet(null)}
+                      aria-label="Close map drawer"
+                    >
+                      <X className="size-4" aria-hidden="true" />
+                    </button>
+                  </div>
+                  {mobileSheet === "report" ? <div data-tour="report-panel">{reportPanelContent}</div> : null}
+                  {mobileSheet === "layers" ? <div className="grid gap-3">{signalPanelContent}</div> : null}
+                  {mobileSheet === "status" ? (
+                    <div className="grid gap-3">
+                      {areaStatusContent ? (
+                        <div className="map-dock pointer-events-auto grid gap-3 rounded-2xl border border-white/[0.12] bg-slate-950/70 p-4 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
+                          {areaStatusContent}
+                        </div>
+                      ) : null}
+                      {pickup && dropoff && reportingMode === "route" && !routePreviewOpen ? (
+                        <RouteRiskWarning riskyReports={riskyRouteReports} confidence={dropoffConfidence} />
+                      ) : null}
+                      <div className="map-dock pointer-events-auto rounded-2xl border border-white/[0.12] bg-slate-950/70 p-4 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
+                        <div className="metric-label">Current mode</div>
+                        <p className="mt-2 text-sm font-semibold leading-6 text-white">{statusMessage}</p>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </>
+      ) : null}
 
       {reportingMode === "route" ? (
-        <div className="pointer-events-none absolute left-3 right-3 top-4 z-[1280] sm:left-4 sm:right-4 lg:left-6 lg:right-6 xl:left-[460px] xl:right-[380px]">
+        <div className="pointer-events-none absolute left-2 right-2 top-3 z-[1280] sm:left-4 sm:right-4 lg:left-6 lg:right-6 xl:left-[460px] xl:right-[380px]">
           <LocationPlacementDock
             pickup={pickup}
             dropoff={dropoff}
@@ -1052,7 +1132,7 @@ export function MapReportView() {
         </motion.div>
       ) : null}
 
-      <div className="route-preview-dock-layer pointer-events-none absolute bottom-5 left-3 right-3 z-[1250] sm:left-4 sm:right-4 lg:left-6 lg:right-6 xl:left-[460px] xl:right-[380px]">
+      <div className="route-preview-dock-layer pointer-events-none absolute bottom-3 left-2 right-2 z-[1250] sm:left-4 sm:right-4 lg:bottom-5 lg:left-6 lg:right-6 xl:left-[460px] xl:right-[380px]">
         <div className="mx-auto w-full max-w-[900px]">
           {reportingMode === "route" ? (
             <RoutePreviewDrawer
@@ -1090,6 +1170,84 @@ export function MapReportView() {
       </div>
     </section>
   );
+}
+
+type MobileMapSheet = "report" | "layers" | "status";
+
+function MobileMapActions({
+  activeSheet,
+  onSheetChange,
+}: {
+  activeSheet: MobileMapSheet | null;
+  onSheetChange: (sheet: MobileMapSheet | null) => void;
+}) {
+  const actions: Array<{ id: MobileMapSheet; label: string; icon: typeof MapPinned }> = [
+    { id: "report", label: "Report", icon: MapPinned },
+    { id: "layers", label: "Layers", icon: Layers3 },
+    { id: "status", label: "Status", icon: Info },
+  ];
+
+  return (
+    <div className="pointer-events-none absolute right-2 top-[5.25rem] z-[1320] grid gap-2 sm:right-4">
+      {actions.map((action) => {
+        const Icon = action.icon;
+        const active = activeSheet === action.id;
+
+        return (
+          <button
+            key={action.id}
+            type="button"
+            className={cn(
+              "map-dock pointer-events-auto inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-xl border border-white/[0.12] px-3 text-xs font-bold shadow-[0_14px_44px_rgba(0,0,0,0.32)] backdrop-blur-2xl",
+              active ? "bg-cyan-300/[0.18] text-cyan-50" : "bg-slate-950/78 text-slate-100",
+            )}
+            onClick={() => onSheetChange(active ? null : action.id)}
+            aria-pressed={active}
+            aria-label={`${active ? "Close" : "Open"} ${action.label.toLowerCase()} drawer`}
+            data-tour={action.id === "report" ? "report-panel" : undefined}
+          >
+            <Icon className="size-4 shrink-0" aria-hidden="true" />
+            <span className="hidden sm:inline">{action.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function mobileSheetTitle(sheet: MobileMapSheet) {
+  if (sheet === "report") return "Reports and route setup";
+  if (sheet === "layers") return "Map layers and signals";
+  return "Map status";
+}
+
+function InvalidateMapSize({ trigger }: { trigger: string }) {
+  const map = useMap();
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => map.invalidateSize());
+    const timeout = window.setTimeout(() => map.invalidateSize(), 280);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timeout);
+    };
+  }, [map, trigger]);
+
+  return null;
+}
+
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() => (typeof window === "undefined" ? false : window.matchMedia(query).matches));
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(query);
+    const update = () => setMatches(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, [query]);
+
+  return matches;
 }
 
 function MapClickHandler({

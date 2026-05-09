@@ -50,7 +50,7 @@ export function MapFilters({ filters, onFiltersChange }: MapFiltersProps) {
         </div>
         <button
           type="button"
-          className="ghost-button min-h-9 px-2"
+          className="ghost-button min-h-11 px-2 sm:min-h-9"
           onClick={() => setExpanded((current) => !current)}
           aria-expanded={expanded}
         >
@@ -149,7 +149,7 @@ function LayerToggle({ label, active, onClick }: { label: string; active: boolea
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border px-3 text-xs font-semibold transition",
+        "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border px-2 text-xs font-semibold transition sm:min-h-10 sm:px-3",
         active ? "border-cyan-200/25 bg-cyan-300/[0.12] text-cyan-100" : "border-white/10 bg-white/[0.04] text-slate-500",
       )}
       aria-pressed={active}

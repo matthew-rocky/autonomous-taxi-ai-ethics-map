@@ -15,7 +15,7 @@ export function MapLegend() {
         <div className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Legend</div>
         <button
           type="button"
-          className="ghost-button min-h-8 px-2 text-xs sm:hidden"
+          className="ghost-button min-h-11 px-2 text-xs sm:hidden"
           onClick={() => setMobileExpanded((current) => !current)}
           aria-expanded={mobileExpanded}
         >

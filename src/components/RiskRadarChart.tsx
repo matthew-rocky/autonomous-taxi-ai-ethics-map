@@ -20,7 +20,7 @@ export function RiskRadarChart({ categories }: RiskRadarChartProps) {
   }));
 
   return (
-    <section className="glass-panel p-5">
+    <section className="glass-panel min-w-0 overflow-hidden p-4 sm:p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="metric-label">Ethics lens</div>
@@ -31,11 +31,11 @@ export function RiskRadarChart({ categories }: RiskRadarChartProps) {
         </span>
       </div>
 
-      <div className="mt-4 h-[320px] w-full">
+      <div className="mt-4 h-[260px] w-full sm:h-[320px]">
         <ResponsiveContainer>
           <RechartsRadarChart data={data} outerRadius="72%">
             <PolarGrid stroke="var(--subtle-border)" />
-            <PolarAngleAxis dataKey="subject" tick={{ fill: "var(--muted-text)", fontSize: 12 }} />
+            <PolarAngleAxis dataKey="subject" tick={{ fill: "var(--muted-text)", fontSize: 10 }} />
             <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: "var(--soft-text)", fontSize: 10 }} />
             <Radar
               name="Ethical pressure"

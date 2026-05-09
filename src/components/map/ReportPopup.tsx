@@ -16,7 +16,7 @@ export function ReportPopup({ report, onResolve }: ReportPopupProps) {
 
   return (
     <div
-      className="map-dock map-dock-strong w-80 overflow-hidden rounded-2xl border border-white/15 bg-slate-950/95 text-slate-100 shadow-[0_28px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl"
+      className="map-dock map-dock-strong w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-white/15 bg-slate-950/95 text-slate-100 shadow-[0_28px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl"
       onClick={stopDomEvent}
       onMouseDown={stopDomEvent}
     >

@@ -14,19 +14,19 @@ export function DecisionBrief({ analysis }: DecisionBriefProps) {
   const filename = analysis.scenarioName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   return (
-    <section className="glass-panel-strong p-5">
+    <section className="glass-panel-strong min-w-0 p-4 sm:p-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div className="metric-label">Decision brief</div>
-          <h2 className="mt-1 text-2xl font-semibold text-white">Responsible AI Decision Brief</h2>
+          <h2 className="mt-1 text-xl font-semibold text-white sm:text-2xl">Responsible AI Decision Brief</h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
             {analysis.destination.name} assessment generated from the uncertainty-aware recommendation engine.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid gap-2 sm:flex sm:flex-wrap">
           <button
             type="button"
-            className="secondary-button"
+            className="secondary-button w-full sm:w-auto"
             onClick={() => downloadText(`${filename || "decision-brief"}.md`, markdown, "text/markdown")}
           >
             <FileText className="size-4" aria-hidden="true" />
@@ -34,7 +34,7 @@ export function DecisionBrief({ analysis }: DecisionBriefProps) {
           </button>
           <button
             type="button"
-            className="secondary-button"
+            className="secondary-button w-full sm:w-auto"
             onClick={() =>
               downloadText(`${filename || "decision-brief"}.json`, JSON.stringify(briefJson, null, 2), "application/json")
             }
@@ -49,9 +49,9 @@ export function DecisionBrief({ analysis }: DecisionBriefProps) {
         <PrototypeExplanationPanel />
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-[0.82fr_1.18fr]">
-        <div className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
-          <div className="flex items-center justify-between gap-3">
+      <div className="mt-6 grid min-w-0 gap-4 lg:grid-cols-[0.82fr_1.18fr]">
+        <div className="min-w-0 rounded-lg border border-white/10 bg-white/[0.04] p-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h3 className="font-semibold text-white">{analysis.scenarioName}</h3>
             <ConfidenceBadge confidence={analysis.evaluation.confidence} compact />
           </div>
@@ -64,12 +64,12 @@ export function DecisionBrief({ analysis }: DecisionBriefProps) {
           </dl>
         </div>
 
-        <div className="rounded-lg border border-white/10 bg-slate-950/60 p-4">
+        <div className="min-w-0 rounded-lg border border-white/10 bg-slate-950/60 p-3 sm:p-4">
           <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-cyan-100">
             <Download className="size-4" aria-hidden="true" />
             Brief preview
           </div>
-          <pre className="max-h-[420px] overflow-auto whitespace-pre-wrap rounded-lg bg-black/30 p-4 text-sm leading-6 text-slate-200">
+          <pre className="max-h-[60vh] overflow-auto whitespace-pre-wrap break-words rounded-lg bg-black/30 p-3 text-sm leading-6 text-slate-200 sm:max-h-[420px] sm:p-4">
             {markdown}
           </pre>
         </div>
@@ -84,9 +84,9 @@ export function DecisionBrief({ analysis }: DecisionBriefProps) {
 
 function BriefMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="grid grid-cols-[110px_1fr] gap-3 border-b border-white/10 pb-3 last:border-b-0 last:pb-0">
+    <div className="grid gap-1 border-b border-white/10 pb-3 last:border-b-0 last:pb-0 sm:grid-cols-[110px_1fr] sm:gap-3">
       <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">{label}</dt>
-      <dd className="text-slate-200">{value}</dd>
+      <dd className="break-words text-slate-200">{value}</dd>
     </div>
   );
 }
