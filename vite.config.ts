@@ -3,11 +3,9 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   base: "/autonomous-taxi-ai-ethics-map/",
-<<<<<<< HEAD
-  
-=======
->>>>>>> d720b2a (github live demo)
+
   plugins: [react()],
+
   build: {
     chunkSizeWarningLimit: 650,
     rollupOptions: {
@@ -20,6 +18,7 @@ export default defineConfig({
       },
     },
   },
+
   resolve: {
     alias: {
       "@": "/src",
