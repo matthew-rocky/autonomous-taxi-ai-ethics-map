@@ -756,16 +756,9 @@ https://research.cs.vt.edu/ns/cs5724papers/6.theoriesofuse.cwaandvsd.friedman.vs
 [4] B. Friedman and D. G. Hendry, *Value Sensitive Design: Shaping Technology with Moral Imagination*. MIT Press, 2019.  
 https://mitpress.mit.edu/9780262537810/value-sensitive-design/
 
-[5] J. Millar, P. Lin, K. Abney, and G. Bekey, “Ethics Settings for Autonomous Vehicles,” in *Robot Ethics 2.0: From Autonomous Cars to Artificial Intelligence*, Oxford University Press, 2017, pp. 20–34.
-
-[6] M. C. Elish, “Moral Crumple Zones: Cautionary Tales in Human-Robot Interaction,” *Engaging Science, Technology, and Society*, vol. 5, pp. 40–60, 2019.  
-https://doi.org/10.17351/ests2019.260
-
-[7] P. Lin, “Why Ethics Matters for Autonomous Cars,” in *Autonomes Fahren*, Springer Vieweg, 2015, pp. 69–85.  
+[5] P. Lin, “Why Ethics Matters for Autonomous Cars,” in *Autonomes Fahren*, Springer Vieweg, 2015, pp. 69–85.  
 https://doi.org/10.1007/978-3-662-45854-9_4
 
-[8] OpenStreetMap Foundation, “Nominatim Usage Policy.”  
-https://operations.osmfoundation.org/policies/nominatim/
 
 ---
 
