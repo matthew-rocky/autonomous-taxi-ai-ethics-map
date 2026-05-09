@@ -6,7 +6,7 @@ import { formatReportAge, getDangerRadius, getReportKind, getSeverityStyle, getS
 
 interface ReportPopupProps {
   report: MapReport;
-  onResolve: (reportId: string) => void;
+  onResolve?: (reportId: string) => void;
 }
 
 export function ReportPopup({ report, onResolve }: ReportPopupProps) {
@@ -59,12 +59,12 @@ export function ReportPopup({ report, onResolve }: ReportPopupProps) {
           {kind === "route" && report.dropoff ? <DetailRow label="Drop-off" value={report.dropoff.address ?? "Route drop-off"} /> : null}
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className={cn("mt-4 grid gap-2", onResolve ? "grid-cols-2" : "grid-cols-1")}>
           <button type="button" className="secondary-button min-h-10 px-3 text-xs" onClick={stopDomEvent}>
             <ExternalLink className="size-3.5" aria-hidden="true" />
             View details
           </button>
-          {report.status !== "resolved" ? (
+          {onResolve && report.status !== "resolved" ? (
             <button
               type="button"
               className="primary-button min-h-10 px-3 text-xs"
@@ -76,11 +76,11 @@ export function ReportPopup({ report, onResolve }: ReportPopupProps) {
               <CheckCircle2 className="size-3.5" aria-hidden="true" />
               Resolve
             </button>
-          ) : (
+          ) : onResolve ? (
             <span className="inline-flex min-h-10 items-center justify-center rounded-lg border border-emerald-200/20 bg-emerald-300/10 px-3 text-xs font-semibold text-emerald-100">
               Resolved
             </span>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

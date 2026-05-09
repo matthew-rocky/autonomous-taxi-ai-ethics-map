@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import L from "leaflet";
 import { CheckCircle2, Info, MapPinned, Navigation } from "lucide-react";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { Circle, CircleMarker, MapContainer, Marker, Pane, Polyline, TileLayer, Tooltip, ZoomControl, useMap, useMapEvents } from "react-leaflet";
+import { Circle, CircleMarker, Marker, Pane, Polyline, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import { bywardUnfoldingReports, initialMapFilters, mockReports } from "@/data/reports";
 import { ConfidenceBadge } from "@/components/ConfidenceBadge";
 import { AreaReportPanel } from "@/components/map/AreaReportPanel";
@@ -12,6 +12,8 @@ import { MapFilters } from "@/components/map/MapFilters";
 import { MapLegend } from "@/components/map/MapLegend";
 import { ReportMarker } from "@/components/map/ReportMarker";
 import { ReportModeSelector } from "@/components/map/ReportModeSelector";
+import { OttawaMapCanvas, OTTAWA_CENTER_POSITION } from "@/components/map/OttawaMapCanvas";
+import { RoutePointMarker } from "@/components/map/RoutePointMarker";
 import { RoutePreviewDrawer } from "@/components/map/RoutePreviewDrawer";
 import { RouteRiskWarning } from "@/components/map/RouteRiskWarning";
 import { RouteReportPanel } from "@/components/map/RouteReportPanel";
@@ -31,7 +33,6 @@ import {
 } from "@/lib/routeRisk";
 import { fetchRoadRouteOptions } from "@/lib/routing";
 import { getSafePickupDropoffSuggestions, type SafePointSuggestion, type SafePointSuggestionWarning } from "@/lib/safePointSuggestions";
-import { useResolvedTheme, type ResolvedTheme } from "@/lib/theme";
 import { cn, confidenceMapColor } from "@/lib/utils";
 import type {
   ConfidenceAssessment,
@@ -46,22 +47,6 @@ import type {
   RoutePoint,
 } from "@/types";
 
-const OTTAWA_CENTER: [number, number] = [45.4215, -75.6972];
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
-const TILE_ATTRIBUTION =
-  import.meta.env.VITE_MAP_ATTRIBUTION ||
-  (MAPBOX_TOKEN
-    ? '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors');
-
-function getTileUrl(theme: ResolvedTheme) {
-  if (import.meta.env.VITE_MAP_TILE_URL) return import.meta.env.VITE_MAP_TILE_URL as string;
-  if (!MAPBOX_TOKEN) return "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-
-  const style = theme === "glass-light" ? "streets-v12" : "dark-v11";
-  return `https://api.mapbox.com/styles/v1/mapbox/${style}/tiles/256/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`;
-}
-
 interface SubmittedReport {
   kind: ReportingMode;
   issueType: string;
@@ -70,7 +55,6 @@ interface SubmittedReport {
 }
 
 export function MapReportView() {
-  const resolvedTheme = useResolvedTheme();
   const [reportingMode, setReportingMode] = useState<ReportingMode>("route");
   const [mapInteractionMode, setMapInteractionMode] = useState<MapInteractionMode>("explore");
   const [pickup, setPickup] = useState<RoutePoint | null>(null);
@@ -163,7 +147,6 @@ export function MapReportView() {
     [dropoff, nearbyRouteRisks, pickup, visibleReports],
   );
   const selectedAreaStyle = getSeverityStyle(areaSeverity);
-  const tileUrl = useMemo(() => getTileUrl(resolvedTheme), [resolvedTheme]);
 
   useEffect(() => {
     if (!reportsApiEnabled) return;
@@ -612,17 +595,14 @@ export function MapReportView() {
       className="isolate relative -mx-4 -mt-2 h-[calc(100vh-73px)] min-h-[760px] overflow-hidden outline-none sm:-mx-6 lg:-mx-8"
     >
       <div className="absolute inset-0 z-0">
-        <MapContainer
-          center={OTTAWA_CENTER}
+        <OttawaMapCanvas
           zoom={13}
           minZoom={11}
           maxZoom={19}
           scrollWheelZoom
-          className={cn("h-full w-full", mapInteractionMode !== "explore" && "map-placement-active")}
-          zoomControl={false}
+          className={cn(mapInteractionMode !== "explore" && "map-placement-active")}
+          zoomControlPosition="bottomright"
         >
-          <TileLayer key={resolvedTheme} attribution={TILE_ATTRIBUTION} url={tileUrl} />
-          <ZoomControl position="bottomright" />
           <MapClickHandler
             interactionMode={mapInteractionMode}
             onPlace={(interactionMode, point) => placePoint(interactionMode, point)}
@@ -826,29 +806,17 @@ export function MapReportView() {
           />
 
           {pickup ? (
-            <Marker position={[pickup.latitude, pickup.longitude]} icon={createMarkerIcon("pickup")} eventHandlers={stopMapPropagationHandlers()}>
-              <Tooltip direction="top" offset={[0, -18]} permanent>
-                Pickup
-              </Tooltip>
-            </Marker>
+            <RoutePointMarker point={pickup} kind="pickup" label="Pickup" />
           ) : null}
           {dropoff ? (
-            <Marker position={[dropoff.latitude, dropoff.longitude]} icon={createMarkerIcon("dropoff")} eventHandlers={stopMapPropagationHandlers()}>
-              <Tooltip direction="top" offset={[0, -18]} permanent>
-                Drop-off
-              </Tooltip>
-            </Marker>
+            <RoutePointMarker point={dropoff} kind="dropoff" label="Drop-off" />
           ) : null}
           {reportingMode === "area" && areaCenter ? (
-            <Marker position={[areaCenter.latitude, areaCenter.longitude]} icon={createMarkerIcon("area")} eventHandlers={stopMapPropagationHandlers()}>
-              <Tooltip direction="top" offset={[0, -18]} permanent>
-                Area
-              </Tooltip>
-            </Marker>
+            <RoutePointMarker point={areaCenter} kind="area" label="Area" />
           ) : null}
 
           <CircleMarker
-            center={OTTAWA_CENTER}
+            center={OTTAWA_CENTER_POSITION}
             radius={8}
             pathOptions={{ color: "#a78bfa", fillColor: "#a78bfa", fillOpacity: 0.35, weight: 2 }}
             eventHandlers={stopMapPropagationHandlers()}
@@ -865,7 +833,7 @@ export function MapReportView() {
                 />
               ))
             : null}
-        </MapContainer>
+        </OttawaMapCanvas>
       </div>
 
       <div className="map-vignette-side pointer-events-none absolute inset-0 z-[900]" />
@@ -1308,23 +1276,6 @@ function SafeSuggestionMapGraphic({ suggestion }: { suggestion: SafePointSuggest
   );
 }
 
-function createMarkerIcon(type: "pickup" | "dropoff" | "area") {
-  const className =
-    type === "pickup"
-      ? "route-marker route-marker-pickup"
-      : type === "dropoff"
-        ? "route-marker route-marker-dropoff"
-        : "route-marker route-marker-area";
-  const label = type === "pickup" ? "P" : type === "dropoff" ? "D" : "A";
-  return L.divIcon({
-    className: "route-marker-shell",
-    html: `<div class="${className}"><span>${label}</span></div>`,
-    iconSize: [42, 42],
-    iconAnchor: [21, 38],
-    popupAnchor: [0, -34],
-  });
-}
-
 function createSafeSuggestionIcon(type: SafePointSuggestion["type"]) {
   const label = type === "pickup" ? "SP" : "SD";
   return L.divIcon({
@@ -1364,7 +1315,7 @@ function routeLabelText(option: EstimatedRouteOption, selected: boolean) {
 
 function routeLabelPosition(routePath: GeoPoint[], optionId: EstimatedRouteOption["id"], offsetLabel: boolean): [number, number] {
   const point = routePath[Math.min(routePath.length - 1, Math.max(0, Math.floor(routePath.length * 0.54)))] ?? routePath[0];
-  if (!point) return OTTAWA_CENTER;
+  if (!point) return OTTAWA_CENTER_POSITION;
   if (!offsetLabel) return [point.latitude, point.longitude];
 
   const offsets: Record<EstimatedRouteOption["id"], [number, number]> = {

@@ -9,7 +9,7 @@ import { ReportPopup } from "@/components/map/ReportPopup";
 
 interface ReportMarkerProps {
   report: MapReport;
-  onResolve: (reportId: string) => void;
+  onResolve?: (reportId: string) => void;
   highlighted?: boolean;
   dimmed?: boolean;
 }
