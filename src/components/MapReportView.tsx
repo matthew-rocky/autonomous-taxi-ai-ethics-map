@@ -1083,7 +1083,7 @@ export function MapReportView() {
         </motion.div>
       ) : null}
 
-      <div className="pointer-events-none absolute bottom-5 left-3 right-3 z-[1250] sm:left-4 sm:right-4 lg:left-6 lg:right-6 xl:left-[460px] xl:right-[380px]">
+      <div className="route-preview-dock-layer pointer-events-none absolute bottom-5 left-3 right-3 z-[1250] sm:left-4 sm:right-4 lg:left-6 lg:right-6 xl:left-[460px] xl:right-[380px]">
         <div className="mx-auto w-full max-w-[900px]">
           {reportingMode === "route" ? (
             <RoutePreviewDrawer

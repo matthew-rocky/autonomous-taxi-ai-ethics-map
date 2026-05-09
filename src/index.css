@@ -1103,6 +1103,12 @@ select:focus-visible {
   border-radius: 1.25rem !important;
 }
 
+@media (max-height: 820px) and (min-width: 1024px) {
+  .route-preview-dock-layer {
+    bottom: 5rem;
+  }
+}
+
 .safe-suggestion-callout .text-white,
 .safe-suggestion-callout .text-slate-100 {
   color: var(--map-dock-text) !important;
