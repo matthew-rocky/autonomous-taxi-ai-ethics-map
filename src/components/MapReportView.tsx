@@ -846,6 +846,7 @@ export function MapReportView() {
             initial={{ opacity: 0, x: -24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.42, ease: "easeOut" }}
+            data-tour="report-panel"
             className={cn(
               "map-dock pointer-events-auto w-full max-w-[430px] overflow-auto rounded-2xl border border-white/[0.12] bg-slate-950/[0.68] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-2xl",
               hasRouteSelection ? "max-h-[calc(100vh-318px)]" : "max-h-[calc(100vh-108px)]",

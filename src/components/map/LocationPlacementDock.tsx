@@ -111,7 +111,12 @@ export function LocationPlacementDock({
   };
 
   return (
-    <div className="pointer-events-auto mx-auto flex w-fit max-w-full flex-col items-center gap-2" onMouseDown={stopDockEvent} onClick={stopDockEvent}>
+    <div
+      className="pointer-events-auto mx-auto flex w-fit max-w-full flex-col items-center gap-2"
+      data-tour="pickup-dropoff-controls"
+      onMouseDown={stopDockEvent}
+      onClick={stopDockEvent}
+    >
       <div className="map-dock map-dock-strong flex max-w-full flex-wrap items-center justify-center gap-1.5 rounded-2xl border border-white/[0.12] bg-slate-950/78 p-1.5 shadow-[0_18px_60px_rgba(0,0,0,0.38),0_0_42px_rgba(34,211,238,0.10)] backdrop-blur-2xl">
         <DockButton
           icon={MapPin}

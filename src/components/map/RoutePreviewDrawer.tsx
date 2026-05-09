@@ -147,6 +147,7 @@ export function RoutePreviewDrawer({
       exit={{ y: 0, opacity: 0 }}
       transition={{ duration: 0.36, ease: "easeOut" }}
       aria-label="Route preview and confidence-aware navigation"
+      data-tour="directions-card"
     >
       <AnimatePresence initial={false}>
         {expanded && routeReady ? (

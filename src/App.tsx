@@ -9,7 +9,7 @@ import {
   MapPinned,
   UserCheck,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { CategoryBreakdown } from "@/components/CategoryBreakdown";
 import { CompareScenarios } from "@/components/CompareScenarios";
@@ -17,6 +17,7 @@ import { ConfidenceBadge } from "@/components/ConfidenceBadge";
 import { DecisionTracePanel } from "@/components/DecisionTracePanel";
 import { DecisionBrief } from "@/components/DecisionBrief";
 import { EthicsToolkit } from "@/components/EthicsToolkit";
+import { GUIDED_TOUR_STORAGE_KEY, GuidedTour } from "@/components/GuidedTour";
 import { Hero } from "@/components/Hero";
 import { Layout } from "@/components/Layout";
 import { AssessmentSignalMap } from "@/components/map/AssessmentSignalMap";
@@ -38,13 +39,26 @@ export default function App() {
   const analyses = useMemo(() => analyzeAllScenarios(scenarios), [scenarios]);
   const [activeView, setActiveView] = useState<ViewMode>("map");
   const [selectedScenario, setSelectedScenario] = useState("Default Ottawa demo");
+  const [tourOpen, setTourOpen] = useState(false);
 
   const selectedAnalysis = analyses.find((analysis) => analysis.scenarioName === selectedScenario) ?? analyses[0];
+
+  useEffect(() => {
+    try {
+      if (!window.localStorage.getItem(GUIDED_TOUR_STORAGE_KEY)) {
+        const timeout = window.setTimeout(() => setTourOpen(true), 650);
+        return () => window.clearTimeout(timeout);
+      }
+    } catch {
+      const timeout = window.setTimeout(() => setTourOpen(true), 650);
+      return () => window.clearTimeout(timeout);
+    }
+  }, []);
 
   return (
     <>
       <AnimatedBackground />
-      <Layout activeView={activeView} onViewChange={setActiveView}>
+      <Layout activeView={activeView} onViewChange={setActiveView} onReplayTour={() => setTourOpen(true)}>
         {activeView !== "map" && activeView !== "framework" ? <Hero analysis={selectedAnalysis} onViewChange={setActiveView} /> : null}
 
         <AnimatePresence mode="wait">
@@ -71,6 +85,7 @@ export default function App() {
           </motion.div>
         </AnimatePresence>
       </Layout>
+      <GuidedTour open={tourOpen} activeView={activeView} onOpenChange={setTourOpen} onViewChange={setActiveView} />
     </>
   );
 }

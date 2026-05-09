@@ -2,6 +2,7 @@ import { BarChart3, FileText, GitCompareArrows, MapPinned, ShieldCheck, Sparkles
 import type { ReactNode } from "react";
 import type { ViewMode } from "@/types";
 import { cn } from "@/lib/utils";
+import { ReplayTourButton } from "@/components/GuidedTour";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 const navItems: Array<{ id: ViewMode; label: string; icon: typeof BarChart3 }> = [
@@ -15,10 +16,11 @@ const navItems: Array<{ id: ViewMode; label: string; icon: typeof BarChart3 }> =
 interface LayoutProps {
   activeView: ViewMode;
   onViewChange: (view: ViewMode) => void;
+  onReplayTour: () => void;
   children: ReactNode;
 }
 
-export function Layout({ activeView, onViewChange, children }: LayoutProps) {
+export function Layout({ activeView, onViewChange, onReplayTour, children }: LayoutProps) {
   return (
     <div className="min-h-screen">
       <header className="app-header sticky top-0 z-40">
@@ -49,6 +51,7 @@ export function Layout({ activeView, onViewChange, children }: LayoutProps) {
                     key={item.id}
                     type="button"
                     onClick={() => onViewChange(item.id)}
+                    data-tour={tourAttributeForView(item.id)}
                     className={cn("nav-button", active ? "nav-button-active" : "nav-button-idle")}
                   >
                     <Icon className="size-4" aria-hidden="true" />
@@ -57,7 +60,10 @@ export function Layout({ activeView, onViewChange, children }: LayoutProps) {
                 );
               })}
             </nav>
-            <ThemeSwitcher />
+            <div className="flex flex-wrap items-center gap-2">
+              <ReplayTourButton onClick={onReplayTour} />
+              <ThemeSwitcher />
+            </div>
           </div>
         </div>
       </header>
@@ -65,4 +71,12 @@ export function Layout({ activeView, onViewChange, children }: LayoutProps) {
       <main className="app-main w-full px-3 pb-12 sm:px-5 lg:px-7 2xl:px-10">{children}</main>
     </div>
   );
+}
+
+function tourAttributeForView(view: ViewMode) {
+  if (view === "map") return "live-map-tab";
+  if (view === "assessment") return "assessment-tab";
+  if (view === "compare") return "compare-tab";
+  if (view === "framework") return "design-tools-tab";
+  return undefined;
 }
